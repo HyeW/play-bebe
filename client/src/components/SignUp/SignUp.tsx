@@ -45,7 +45,7 @@ function SignUp() {
         sx={{border: 1, borderRadius: 1, borderColor: 'secondary.dark'}}>
         <Box>
           <Typography variant="h4" align="center">
-            Sign Up
+            회원가입
           </Typography>
           <Stack spacing={1.5} mt={3}>
 
@@ -54,8 +54,8 @@ function SignUp() {
             <NameInputTextField onChange={e => dispatch(SignUpAction.setName(e.target.value))} value={name}/>
             <PasswordInputTextField onChange={e => dispatch(SignUpAction.setPassword(e.target.value))}
                                     value={password}/>
-            <Button variant="contained" size="large" onClick={() => handleSubmit()}>
-              Sign Up
+            <Button variant="contained" size="large" disableElevation onClick={() => handleSubmit()}>
+              회원가입
             </Button>
           </Stack>
         </Box>
@@ -70,7 +70,7 @@ function EmailInputTextField(props: {
 }) {
   return <TextField
     id="email"
-    label="Email"
+    label="이메일"
     variant="outlined"
     autoComplete="off"
     type="email"
@@ -88,7 +88,7 @@ function NameInputTextField(props: {
 }) {
   return <TextField
     id="name"
-    label="Name"
+    label="이름"
     variant="outlined"
     autoComplete="off"
     type="text"
@@ -104,7 +104,7 @@ function PasswordInputTextField(props: {
 }) {
   return <TextField
     id="password"
-    label="Password"
+    label="비밀번호"
     variant="outlined"
     autoComplete="off"
     type="password"
