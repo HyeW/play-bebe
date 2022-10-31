@@ -21,18 +21,33 @@ const pages = ['어디 갈까', '회원 리뷰'];
 const settings = ['회원가입', '로그인'];
 
 function MenuBar() {
+  const dispatch = useDispatch();
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    dispatch(MenuBarAction.setAnchorElementUser(event.currentTarget));
+  };
+  const handleCloseUserMenu = () => {
+    dispatch(MenuBarAction.setAnchorElementUser(null));
+  };
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    dispatch(MenuBarAction.setAnchorElementNav(event.currentTarget));
+  };
+  const handleCloseNavMenu = () => {
+    dispatch(MenuBarAction.setAnchorElementNav(null));
+  };
+
   return (
-    <AppBar position="sticky" sx={{ boxShadow: 0, borderBottom: "1px solid", borderBottomColor: "primary.dark" }}>
+    <AppBar position="sticky" sx={{boxShadow: 0, borderBottom: "1px solid", borderBottomColor: "primary.dark"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <LogoMD/>
           <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}/>
-          <NavMenuMD/>
-          <UserMenuMD/>
+          <NavMenuMD handleCloseNavMenu={handleCloseNavMenu}/>
+          <UserMenuMD handleCloseUserMenu={handleCloseUserMenu}/>
 
-          <NavMenuXS/>
+          <NavMenuXS handleOpenNavMenu={handleOpenNavMenu} handleCloseNavMenu={handleCloseNavMenu}/>
           <LogoXS/>
-          <UserMenuXS/>
+          <UserMenuXS handleOpenUserMenu={handleOpenUserMenu} handleCloseUserMenu={handleCloseUserMenu}/>
         </Toolbar>
       </Container>
     </AppBar>
@@ -88,13 +103,12 @@ const LogoXS = () => {
   );
 };
 
-const NavMenuMD = () => {
-  const dispatch = useDispatch();
+interface NavMenuProps {
+  handleOpenNavMenu?: (event: React.MouseEvent<HTMLElement>) => void;
+  handleCloseNavMenu: () => void;
+}
 
-  const handleCloseNavMenu = () => {
-    dispatch(MenuBarAction.setAnchorElementNav(null));
-  };
-
+const NavMenuMD = ({handleCloseNavMenu}: NavMenuProps) => {
   return (
     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
       {pages.map((page) => (
@@ -110,17 +124,8 @@ const NavMenuMD = () => {
   );
 };
 
-const NavMenuXS = () => {
-  const dispatch = useDispatch();
+const NavMenuXS = ({handleOpenNavMenu, handleCloseNavMenu}: NavMenuProps) => {
   const anchorElementNav = useSelector((state: RootState) => state.MenuBarReducer.anchorElementNav);
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    dispatch(MenuBarAction.setAnchorElementNav(event.currentTarget));
-  };
-
-  const handleCloseNavMenu = () => {
-    dispatch(MenuBarAction.setAnchorElementNav(null));
-  };
 
   return (
     <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
@@ -162,12 +167,12 @@ const NavMenuXS = () => {
   );
 };
 
-const UserMenuMD = () => {
-  const dispatch = useDispatch();
-  const handleCloseUserMenu = () => {
-    dispatch(MenuBarAction.setAnchorElementUser(null));
-  };
+interface UserMenuProps {
+  handleOpenUserMenu?: (event: React.MouseEvent<HTMLElement>) => void;
+  handleCloseUserMenu: () => void;
+}
 
+const UserMenuMD = ({handleCloseUserMenu}: UserMenuProps) => {
   return (
     <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
       {settings.map((setting) => (
@@ -180,17 +185,8 @@ const UserMenuMD = () => {
   );
 };
 
-const UserMenuXS = () => {
-  const dispatch = useDispatch();
+const UserMenuXS = ({handleOpenUserMenu, handleCloseUserMenu}: UserMenuProps) => {
   const anchorElementUser = useSelector((state: RootState) => state.MenuBarReducer.anchorElementUser);
-
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    dispatch(MenuBarAction.setAnchorElementUser(event.currentTarget));
-  };
-
-  const handleCloseUserMenu = () => {
-    dispatch(MenuBarAction.setAnchorElementUser(null));
-  };
 
   return (
     <Box sx={{flexGrow: 0, display: {xs: 'flex', md: 'none'}}}>
