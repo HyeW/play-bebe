@@ -22,7 +22,7 @@ const settings = ['회원가입', '로그인'];
 
 function MenuBar() {
   return (
-    <AppBar position="static">
+    <AppBar position="sticky" sx={{ boxShadow: 0, borderBottom: "1px solid", borderBottomColor: "primary.dark" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <LogoMD/>
@@ -51,7 +51,6 @@ const LogoMD = () => {
         sx={{
           mr: 2,
           display: {xs: 'none', md: 'flex'},
-          fontFamily: 'monospace',
           fontWeight: 700,
           letterSpacing: '.3rem',
           color: 'inherit',
@@ -77,7 +76,6 @@ const LogoXS = () => {
           mr: 2,
           display: {xs: 'flex', md: 'none'},
           flexGrow: 1,
-          fontFamily: 'monospace',
           fontWeight: 700,
           letterSpacing: '.3rem',
           color: 'inherit',
@@ -103,7 +101,7 @@ const NavMenuMD = () => {
         <Button
           key={page}
           onClick={handleCloseNavMenu}
-          sx={{mx: 3, my: 2, color: 'white', display: 'block'}}
+          sx={{mx: 3, my: 2, color: 'inherit', display: 'block'}}
         >
           <Typography>{page}</Typography>
         </Button>
@@ -174,7 +172,7 @@ const UserMenuMD = () => {
     <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
       {settings.map((setting) => (
         <Button key={setting} onClick={handleCloseUserMenu}
-                sx={{my: 2, color: 'white', display: 'block'}}>
+                sx={{my: 2, color: 'inherit', display: 'block'}}>
           {setting}
         </Button>
       ))}
