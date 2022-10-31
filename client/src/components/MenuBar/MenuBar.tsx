@@ -16,9 +16,12 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
 import {MenuBarAction} from "./MenuBarReducer";
+import { Link as RouterLink } from 'react-router-dom';
 
 const pages = ['어디 갈까', '회원 리뷰'];
+const pagesLinks = ['/where-to-go', '/users-review'];
 const settings = ['회원가입', '로그인'];
+const settingsLinks=['/signup', '/login'];
 
 function MenuBar() {
   const dispatch = useDispatch();
@@ -88,7 +91,7 @@ const LogoXS = () => {
         variant="h5"
         noWrap
         component="a"
-        href=""
+        href="/"
         sx={{
           mr: 2,
           display: {xs: 'flex', md: 'none'},
@@ -113,12 +116,14 @@ interface NavMenuProps {
 const NavMenuMD = ({handleCloseNavMenu}: NavMenuProps) => {
   return (
     <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-      {pages.map((page) => (
+      {pages.map((page, index) => (
         <Button
           key={page}
           onClick={handleCloseNavMenu}
           color="secondary"
           sx={{mx: 3, my: 2, color: 'inherit', display: 'block'}}
+          component={RouterLink}
+          to={pagesLinks[index]}
         >
           <Typography>{page}</Typography>
         </Button>
@@ -160,8 +165,11 @@ const NavMenuXS = ({handleOpenNavMenu, handleCloseNavMenu}: NavMenuProps) => {
           display: {xs: 'block', md: 'none'},
         }}
       >
-        {pages.map((page) => (
-          <MenuItem key={page} onClick={handleCloseNavMenu}>
+        {pages.map((page, index) => (
+          <MenuItem key={page}
+                    onClick={handleCloseNavMenu}
+                    component={RouterLink}
+                    to={pagesLinks[index]}>
             <Typography textAlign="center">{page}</Typography>
           </MenuItem>
         ))}
@@ -178,10 +186,12 @@ interface UserMenuProps {
 const UserMenuMD = ({handleCloseUserMenu}: UserMenuProps) => {
   return (
     <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
-      {settings.map((setting) => (
+      {settings.map((setting, index) => (
         <Button key={setting} onClick={handleCloseUserMenu}
                 color="secondary"
-                sx={{my: 2, color: 'inherit', display: 'block'}}>
+                sx={{my: 2, color: 'inherit', display: 'block'}}
+                component={RouterLink}
+                to={settingsLinks[index]}>
           {setting}
         </Button>
       ))}
@@ -217,8 +227,11 @@ const UserMenuXS = ({handleOpenUserMenu, handleCloseUserMenu}: UserMenuProps) =>
         open={Boolean(anchorElementUser)}
         onClose={handleCloseUserMenu}
       >
-        {settings.map((setting) => (
-          <MenuItem key={setting} onClick={handleCloseUserMenu}>
+        {settings.map((setting, index) => (
+          <MenuItem key={setting}
+                    onClick={handleCloseUserMenu}
+                    component={RouterLink}
+                    to={settingsLinks[index]}>
             <Typography textAlign="center">{setting}</Typography>
           </MenuItem>
         ))}
