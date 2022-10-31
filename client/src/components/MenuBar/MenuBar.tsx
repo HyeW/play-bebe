@@ -37,7 +37,9 @@ function MenuBar() {
   };
 
   return (
-    <AppBar position="sticky" sx={{boxShadow: 0, borderBottom: "1px solid", borderBottomColor: "primary.dark"}}>
+    <AppBar position="sticky"
+            sx={{boxShadow: 0, borderBottom: "1px solid", borderBottomColor: "secondary.dark"}}
+            color="secondary">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <LogoMD/>
@@ -115,6 +117,7 @@ const NavMenuMD = ({handleCloseNavMenu}: NavMenuProps) => {
         <Button
           key={page}
           onClick={handleCloseNavMenu}
+          color="secondary"
           sx={{mx: 3, my: 2, color: 'inherit', display: 'block'}}
         >
           <Typography>{page}</Typography>
@@ -177,6 +180,7 @@ const UserMenuMD = ({handleCloseUserMenu}: UserMenuProps) => {
     <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
       {settings.map((setting) => (
         <Button key={setting} onClick={handleCloseUserMenu}
+                color="secondary"
                 sx={{my: 2, color: 'inherit', display: 'block'}}>
           {setting}
         </Button>
