@@ -23,7 +23,6 @@ public class WeatherApiController {
 //            @RequestParam("gu_name") String guName
     ) throws Exception{
         DateTimeDto dateTimeDto = weatherService.getCurDateTime(); // 현재 시간 정보
-        System.out.println(dateTimeDto.getDate()+","+dateTimeDto.getTime());
         LocationDto locationDto = weatherService.getCurX_Y(new RegionNameDto("siName","guName"));
         String JSONdata = weatherService.getJSONdata(locationDto, dateTimeDto);
         WeatherDto weather = weatherService.getWeather(JSONdata);

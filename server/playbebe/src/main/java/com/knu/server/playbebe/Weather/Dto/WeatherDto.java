@@ -12,4 +12,12 @@ public class WeatherDto {
     private String RainyProb; // 강수 확률
     private String RainyType; // 강수 형태
     private String WindSpeed; // 풍속
+
+    public WeatherDto(String SKY, String Degree, String RainyProb, String RainyType, String WindSpeed){
+        this.SKY = SKY;
+        this.Degree = Degree;
+        this.RainyProb = RainyProb;
+        this.RainyType = RainyType;
+        this.WindSpeed = WindSpeed;
+    }
 }

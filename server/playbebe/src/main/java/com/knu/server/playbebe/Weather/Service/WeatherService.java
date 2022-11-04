@@ -3,8 +3,16 @@ import com.knu.server.playbebe.Weather.Dto.DateTimeDto;
 import com.knu.server.playbebe.Weather.Dto.LocationDto;
 import com.knu.server.playbebe.Weather.Dto.RegionNameDto;
 import com.knu.server.playbebe.Weather.Dto.WeatherDto;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -45,11 +53,67 @@ public class WeatherService {
     return null;
     }
 
-    public String getJSONdata(LocationDto locationDto, DateTimeDto dateTimeDto){
-    return null;
+    public String getJSONdata(LocationDto locationDto, DateTimeDto dateTimeDto) throws IOException {
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"); /*URL*/
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=P67cLmcxkzL21GLQ9aYyoaxYg9d9OTbkc%2BcShD%2F6ce%2FiMzP4F2t7qA87%2Fa%2FtPCrzROxYqul87sS9Q0mO6kjPdg%3D%3D"); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); /*한 페이지 결과 수*/
+        urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); /*요청자료형식(XML/JSON) Default: XML*/
+        urlBuilder.append("&" + URLEncoder.encode("base_date","UTF-8") + "=" + URLEncoder.encode(dateTimeDto.getDate(), "UTF-8")); /*‘21년 6월 28일 발표*/
+        urlBuilder.append("&" + URLEncoder.encode("base_time","UTF-8") + "=" + URLEncoder.encode(dateTimeDto.getTime(), "UTF-8")); /*06시 발표(정시단위) */
+        urlBuilder.append("&" + URLEncoder.encode("nx","UTF-8") + "=" + URLEncoder.encode(locationDto.getX(), "UTF-8")); /*예보지점의 X 좌표값*/
+        urlBuilder.append("&" + URLEncoder.encode("ny","UTF-8") + "=" + URLEncoder.encode(locationDto.getY(), "UTF-8")); /*예보지점의 Y 좌표값*/
+        URL url = new URL(urlBuilder.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+        System.out.println("Response code: " + conn.getResponseCode());
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+        }
+        StringBuilder result = new StringBuilder();
+        String line;
+        while ((line = rd.readLine()) != null) {
+            result.append(line);
+        }
+        rd.close();
+        conn.disconnect();
+        return result.toString();
     }
 
-    public static WeatherDto getWeather(String JSONdata){
-    return null;
+    public static WeatherDto getWeather(String JSONdata) throws JSONException {
+
+        JSONObject jObject = new JSONObject(JSONdata);
+        JSONObject response = jObject.getJSONObject("response");
+        JSONObject body = response.getJSONObject("body");
+        JSONObject items = body.getJSONObject("items");
+        JSONArray item = items.getJSONArray("item");
+
+        String SKY = new JSONObject(item.get(5).toString()).getString("fcstValue");
+        String Degree = new JSONObject(item.get(0).toString()).getString("fcstValue")+"°"; // 1시간 기온 TMP
+        String RainyProb = new JSONObject(item.get(7).toString()).getString("fcstValue")+"%"; // 강수 확률 POP
+        String RainyType = new JSONObject(item.get(6).toString()).getString("fcstValue"); // 강수 형태 PTY
+        String WindSpeed = new JSONObject(item.get(4).toString()).getString("fcstValue"); // 풍속 WSD
+
+        if(SKY.equals("1")) SKY = "맑음";
+        else if(SKY.equals("3")) SKY = "구름 많음";
+        else SKY = "흐림";
+
+        if(RainyType.equals("0")) RainyType="없음";
+        else if(RainyType.equals("1")) RainyType="비";
+        else if(RainyType.equals("2")) RainyType="비/눈";
+        else if(RainyType.equals("3")) RainyType="눈";
+        else RainyType="소나기";
+
+        double windSpeed = Double.parseDouble(WindSpeed);
+        if(windSpeed<4.0) WindSpeed ="바람이 약하다(연기 흐름에 따라 풍향감지 가능)";
+        else if(windSpeed>=4.0 && windSpeed<9.0) WindSpeed ="바람이 약간 강하다(안민에 감촉을 느끼면서 나뭇잎이 조금 흔들림)";
+        else if(windSpeed>=9.0 && windSpeed<14) WindSpeed="바람이 강하다(나무 가지와 깃발이 가볍게 흔들림)";
+        else WindSpeed="바람이 매우 강하다(먼지가 일고, 작은 나무 전체가 흔들림)";
+
+        return new WeatherDto(SKY,Degree,RainyProb,RainyType,WindSpeed);
     }
 }
