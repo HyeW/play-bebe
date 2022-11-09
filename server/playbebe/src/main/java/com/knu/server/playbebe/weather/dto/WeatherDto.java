@@ -1,4 +1,4 @@
-package com.knu.server.playbebe.Weather.Dto;
+package com.knu.server.playbebe.weather.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

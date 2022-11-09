@@ -1,8 +1,8 @@
-package com.knu.server.playbebe.Weather.Service;
-import com.knu.server.playbebe.Weather.Dto.DateTimeDto;
-import com.knu.server.playbebe.Weather.Dto.LocationDto;
-import com.knu.server.playbebe.Weather.Dto.RegionNameDto;
-import com.knu.server.playbebe.Weather.Dto.WeatherDto;
+package com.knu.server.playbebe.weather.service;
+import com.knu.server.playbebe.weather.dto.DateTimeDto;
+import com.knu.server.playbebe.weather.dto.CoordinateDto;
+import com.knu.server.playbebe.weather.dto.RegionNameDto;
+import com.knu.server.playbebe.weather.dto.WeatherDto;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,12 +11,10 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+
 @Service
 public class WeatherService {
 
@@ -48,12 +46,12 @@ public class WeatherService {
         return new DateTimeDto(date,time);
     }
 
-    public LocationDto getCurX_Y(RegionNameDto regionNameDto){
+    public CoordinateDto getCurX_Y(RegionNameDto regionNameDto){
 
     return null;
     }
 
-    public String getJSONdata(LocationDto locationDto, DateTimeDto dateTimeDto) throws IOException {
+    public String getJSONdata(CoordinateDto coordinateDto, DateTimeDto dateTimeDto) throws IOException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=P67cLmcxkzL21GLQ9aYyoaxYg9d9OTbkc%2BcShD%2F6ce%2FiMzP4F2t7qA87%2Fa%2FtPCrzROxYqul87sS9Q0mO6kjPdg%3D%3D"); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
@@ -61,8 +59,8 @@ public class WeatherService {
         urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); /*요청자료형식(XML/JSON) Default: XML*/
         urlBuilder.append("&" + URLEncoder.encode("base_date","UTF-8") + "=" + URLEncoder.encode(dateTimeDto.getDate(), "UTF-8")); /*‘21년 6월 28일 발표*/
         urlBuilder.append("&" + URLEncoder.encode("base_time","UTF-8") + "=" + URLEncoder.encode(dateTimeDto.getTime(), "UTF-8")); /*06시 발표(정시단위) */
-        urlBuilder.append("&" + URLEncoder.encode("nx","UTF-8") + "=" + URLEncoder.encode(locationDto.getX(), "UTF-8")); /*예보지점의 X 좌표값*/
-        urlBuilder.append("&" + URLEncoder.encode("ny","UTF-8") + "=" + URLEncoder.encode(locationDto.getY(), "UTF-8")); /*예보지점의 Y 좌표값*/
+        urlBuilder.append("&" + URLEncoder.encode("nx","UTF-8") + "=" + URLEncoder.encode(coordinateDto.getX(), "UTF-8")); /*예보지점의 X 좌표값*/
+        urlBuilder.append("&" + URLEncoder.encode("ny","UTF-8") + "=" + URLEncoder.encode(coordinateDto.getY(), "UTF-8")); /*예보지점의 Y 좌표값*/
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
