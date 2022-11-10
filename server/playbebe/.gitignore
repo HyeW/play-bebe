@@ -37,4 +37,4 @@ out/
 .vscode/
 
 src/main/java/com/knu/server/playbebe/getPlace.java
-src/main/resources/application.properties
+application.properties
