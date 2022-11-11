@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+src/main/java/com/knu/server/playbebe/getPlace.java
+application.properties
