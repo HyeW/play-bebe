@@ -1,10 +1,12 @@
 package com.knu.server.playbebe.recommend.model;
 
+import com.knu.server.playbebe.review.model.Review;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,4 +36,14 @@ public class Place {
 
     @Column
     private String establishmentName;
+
+    @Column
+    private double latitude;
+
+    @Column
+    private double longitude;
+
+    @OneToMany(mappedBy="place")
+    private List<Review> messages;
+
 }

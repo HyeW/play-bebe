@@ -6,5 +6,7 @@ create table Place(
      postalCode VARCHAR(20), 	-- 18 우편번호
      address VARCHAR(100),	-- 19 소재지 전체주소
      roadNameAddress VARCHAR(100),	-- 20	도로명 주소
-     establishmentName VARCHAR(50)	-- 22 사업자명
+     establishmentName VARCHAR(50),	-- 22 사업자명
+     coordinateX double,   -- 26 위도
+     coordinateY double   -- 27 경도
 );
