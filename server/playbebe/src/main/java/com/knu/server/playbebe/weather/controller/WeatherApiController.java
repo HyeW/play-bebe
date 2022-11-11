@@ -7,6 +7,7 @@ import com.knu.server.playbebe.weather.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,8 +19,9 @@ public class WeatherApiController {
 
     @GetMapping("/weather")
     public WeatherDto restApiGetWeather(
-//            @RequestParam("si_name") String siName,
-//            @RequestParam("gu_name") String guName
+            @RequestParam("siName") String siName,
+            @RequestParam("guName") String guName,
+            @RequestParam("dongName") String dongName
     ) throws Exception{
         DateTimeDto dateTimeDto = weatherService.getCurDateTime(); // 현재 시간 정보
         CoordinateDto coordinateDto = weatherService.getCurX_Y(new RegionNameDto("siName","guName"));
