@@ -2,7 +2,7 @@ package com.knu.server.playbebe.weather;
 import java.io.*;
 import java.sql.*;
 
-public class getLocation {
+public class GetLocation {
     public static PreparedStatement pstmt;
     public static Connection conn;
 
@@ -22,9 +22,9 @@ public class getLocation {
         }
     }
     public static void getConnection() throws SQLException {
-        String url = "jdbc:mysql://dbinstance.csaqw2bfsjnj.ap-northeast-2.rds.amazonaws.com:3306/playbebe";
-        String id = "admin";
-        String pass = "dbinstance";
+        String url = new PersonalInfo().getUrl();
+        String id = new PersonalInfo().getId();
+        String pass = new PersonalInfo().getPassword();
         conn = DriverManager.getConnection(url,id,pass);
     }
     public static void insertQuery() throws IOException {

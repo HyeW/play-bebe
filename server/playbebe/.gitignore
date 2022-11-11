@@ -37,4 +37,5 @@ out/
 .vscode/
 
 src/main/java/com/knu/server/playbebe/getPlace.java
+src/main/java/com/knu/server/playbebe/weather/PersonalInfo.java
 application.properties
