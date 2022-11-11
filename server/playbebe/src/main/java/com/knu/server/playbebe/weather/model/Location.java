@@ -7,8 +7,8 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter @Setter
-@NoArgsConstructor
 @Entity
+@NoArgsConstructor
 @Table(name = "location")
 public class Location {
 
@@ -17,25 +17,26 @@ public class Location {
     private Long id;
 
     @Column(nullable = false)
-    private String phase_1;
+    private String phaseOne;
 
     @Column
-    private String phase_2;
+    private String phaseTwo;
 
     @Column
-    private String phase_3;
+    private String phaseThree;
 
     @Column(nullable = false)
-    private int X;
+    private String X;
 
     @Column(nullable = false)
-    private int Y;
+    private String Y;
 
-    public Location(String phase_1, String phase_2, String phase_3, int X, int Y){
-        this.phase_1 = phase_1;
-        this.phase_2 = phase_2;
-        this.phase_3 = phase_3;
+    public Location(String phaseOne, String phaseTwo, String phaseThree, String X, String Y) {
+        this.phaseOne = phaseOne;
+        this.phaseTwo = phaseTwo;
+        this.phaseThree = phaseThree;
         this.X = X;
         this.Y = Y;
     }
+
 }

@@ -35,7 +35,6 @@ public class GetLocation {
         try{
             String query = "insert into Location(phase_1,phase_2,phase_3,X,Y) values (?,?,?,?,?)";
             pstmt = conn.prepareStatement(query);
-
             while((line = br.readLine())!=null){
                 String[] tmp = line.split(",");
                 String phase_1 = tmp[2];

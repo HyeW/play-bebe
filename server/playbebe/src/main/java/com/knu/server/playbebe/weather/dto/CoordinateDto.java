@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CoordinateDto {
-    private String x; // OO시
-    private String y; // OO구
+    private String x;
+    private String y;
 
     public CoordinateDto(String x, String y){
         this.x = x;
