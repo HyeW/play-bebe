@@ -43,6 +43,9 @@ public class Place {
     @Column
     private double longitude;
 
+    @Column
+    private double totalRating;
+
     @OneToMany(mappedBy="place")
     private List<Review> messages;
 
