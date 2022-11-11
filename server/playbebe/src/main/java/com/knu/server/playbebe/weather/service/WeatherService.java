@@ -3,6 +3,9 @@ import com.knu.server.playbebe.weather.dto.DateTimeDto;
 import com.knu.server.playbebe.weather.dto.CoordinateDto;
 import com.knu.server.playbebe.weather.dto.RegionNameDto;
 import com.knu.server.playbebe.weather.dto.WeatherDto;
+import com.knu.server.playbebe.weather.model.Location;
+import com.knu.server.playbebe.weather.respository.LocationRepository;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,12 +17,14 @@ import java.io.InputStreamReader;
 import java.net.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class WeatherService {
-
+    private final LocationRepository locationRepository;
     public DateTimeDto getCurDateTime(){ // 현재 시간 정보
-        // 날짜
+        // 오늘 날짜
         LocalDate now = LocalDate.now();
         StringBuffer sb = new StringBuffer();
         sb.append(now.getYear());
@@ -28,7 +33,7 @@ public class WeatherService {
         sb.append(now.getDayOfMonth());
         String date = sb.toString();
 
-        //시간
+        //현재 시각
         int base_time[] = {2,5,8,11,14,17,20,23,25};
         LocalTime now_ = LocalTime.now();
         sb = new StringBuffer();
@@ -46,11 +51,15 @@ public class WeatherService {
         return new DateTimeDto(date,time);
     }
 
+    // OO시,OO구,00동으로 좌표값 가져오기
     public CoordinateDto getCurX_Y(RegionNameDto regionNameDto){
-
-    return null;
+    Optional<Location> location = locationRepository.findById((long)0);
+    String X = location.get().getX();
+    String Y = location.get().getY();
+    return new CoordinateDto(X,Y);
     }
 
+    // 날씨 API JSON으로 가져오기
     public String getJSONdata(CoordinateDto coordinateDto, DateTimeDto dateTimeDto) throws IOException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=P67cLmcxkzL21GLQ9aYyoaxYg9d9OTbkc%2BcShD%2F6ce%2FiMzP4F2t7qA87%2Fa%2FtPCrzROxYqul87sS9Q0mO6kjPdg%3D%3D"); /*Service Key*/
@@ -82,6 +91,7 @@ public class WeatherService {
         return result.toString();
     }
 
+    // JSON 데이터 파싱하기
     public static WeatherDto getWeather(String JSONdata) throws JSONException {
 
         JSONObject jObject = new JSONObject(JSONdata);
@@ -105,7 +115,6 @@ public class WeatherService {
         else if(RainyType.equals("2")) RainyType="비/눈";
         else if(RainyType.equals("3")) RainyType="눈";
         else RainyType="소나기";
-
         double windSpeed = Double.parseDouble(WindSpeed);
         if(windSpeed<4.0) WindSpeed ="바람이 약하다(연기 흐름에 따라 풍향감지 가능)";
         else if(windSpeed>=4.0 && windSpeed<9.0) WindSpeed ="바람이 약간 강하다(안민에 감촉을 느끼면서 나뭇잎이 조금 흔들림)";
