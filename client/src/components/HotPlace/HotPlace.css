@@ -1,3 +1,7 @@
 .slick-prev:before, .slick-next:before {
     color: black;
 }
+
+.slick-slide {
+    margin: 0 10px;
+}
