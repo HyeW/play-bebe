@@ -15,25 +15,13 @@ export default function HotPlace() {
     variableWidth: true,
   };
 
-  const tempData: HotPlaceCardProps[] = [
-    {placeName: '편백숲체험농장', address: '대구시 동구', rating: 4.7, visitCount: 136, distance: '8.6km'},
-    {placeName: 'A장소', address: 'A주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
-    {placeName: 'B장소', address: 'B주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
-    {placeName: 'C장소', address: 'C주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
-    {placeName: 'D장소', address: 'D주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
-    {placeName: 'E장소', address: 'E주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
-    {placeName: 'F장소', address: 'F주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
-    {placeName: 'G장소', address: 'G주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
-    {placeName: 'H장소', address: 'H주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
-    {placeName: 'I장소', address: 'I주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
-  ]
   return (
     <div>
       <HotPlaceTitle/>
       <Slider {...settings}>
         {tempData.map(data =>
           <HotPlaceCard key={data.placeName} placeName={data.placeName} address={data.address} rating={data.rating}
-                        visitCount={data.visitCount} distance={data.distance}/>)}
+                        visitCount={data.visitCount} distance={data.distance} isHotPlaceCard={true}/>)}
       </Slider>
     </div>
   );
@@ -49,3 +37,12 @@ const HotPlaceTitle = () => {
     </Typography>
   );
 };
+
+export const tempData: HotPlaceCardProps[] = [
+  {placeName: '편백숲체험농장', address: '대구시 동구', rating: 4.7, visitCount: 136, distance: '8.6km'},
+  {placeName: 'A장소', address: 'A주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
+  {placeName: 'B장소', address: 'B주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
+  {placeName: 'C장소', address: 'C주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
+  {placeName: 'D장소', address: 'D주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
+  {placeName: 'E장소', address: 'E주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
+]

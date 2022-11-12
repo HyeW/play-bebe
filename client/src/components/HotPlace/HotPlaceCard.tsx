@@ -2,12 +2,12 @@ import {Box, Skeleton, Stack, Typography} from "@mui/material";
 import {amber} from "@mui/material/colors";
 import React from "react";
 
-export interface HotPlaceCardProps extends HotPlaceCardTextProps, HotPlaceCardIconProps {}
+export interface HotPlaceCardProps extends HotPlaceCardTextProps, HotPlaceCardIconProps, HotPlaceCardImageProps {}
 
-export default function HotPlaceCard({placeName, address, rating, visitCount, distance}: HotPlaceCardProps) {
+export default function HotPlaceCard({placeName, address, rating, visitCount, distance, isHotPlaceCard}: HotPlaceCardProps) {
   return (
     <>
-      <HotPlaceCardImage/>
+      <HotPlaceCardImage isHotPlaceCard={isHotPlaceCard}/>
       <Stack direction="row" mt={1}>
         <HotPlaceCardText placeName={placeName} address={address}/>
         <Box flexGrow={1}/>
@@ -17,9 +17,13 @@ export default function HotPlaceCard({placeName, address, rating, visitCount, di
   );
 }
 
-const HotPlaceCardImage = () => {
+interface HotPlaceCardImageProps {
+  isHotPlaceCard?: boolean,
+}
+
+const HotPlaceCardImage = ({isHotPlaceCard}: HotPlaceCardImageProps) => {
   return (
-    <Skeleton variant="rectangular" width={350} height={200} sx={{mt: 1}}/>
+    <Skeleton variant="rectangular" width={isHotPlaceCard ? 350 : '100%'} height={200} sx={{mt: 1}}/>
   );
 };
 
