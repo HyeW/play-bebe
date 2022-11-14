@@ -2,18 +2,20 @@ import {Box, Skeleton, Stack, Typography} from "@mui/material";
 import {amber} from "@mui/material/colors";
 import React from "react";
 
-export interface PlaceCardProps extends PlaceCardTextProps, PlaceCardIconProps, PlaceCardImageProps {}
+export interface PlaceCardProps extends PlaceCardTextProps, PlaceCardIconProps, PlaceCardImageProps {
+  onClick?: ()=>void,
+}
 
-export default function PlaceCard({placeName, address, rating, visitCount, distance, isHotPlaceCard}: PlaceCardProps) {
+export default function PlaceCard({placeName, address, rating, visitCount, distance, isHotPlaceCard, onClick}: PlaceCardProps) {
   return (
-    <>
+    <div onClick={onClick}>
       <PlaceCardImage isHotPlaceCard={isHotPlaceCard}/>
       <Stack direction="row" mt={1}>
         <PlaceCardText placeName={placeName} address={address}/>
         <Box flexGrow={1}/>
         <PlaceCardIcon rating={rating} visitCount={visitCount} distance={distance}/>
       </Stack>
-    </>
+    </div>
   );
 }
 
