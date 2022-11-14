@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./HotPlace.css";
 import {Typography} from "@mui/material";
-import HotPlaceCard, {HotPlaceCardProps} from "./HotPlaceCard";
+import PlaceCard, {PlaceCardProps} from "../PlaceCard";
 
 export default function HotPlace() {
   const settings = {
@@ -20,8 +20,8 @@ export default function HotPlace() {
       <HotPlaceTitle/>
       <Slider {...settings}>
         {tempData.map(data =>
-          <HotPlaceCard key={data.placeName} placeName={data.placeName} address={data.address} rating={data.rating}
-                        visitCount={data.visitCount} distance={data.distance} isHotPlaceCard={true}/>)}
+          <PlaceCard key={data.placeName} placeName={data.placeName} address={data.address} rating={data.rating}
+                     visitCount={data.visitCount} distance={data.distance} isHotPlaceCard={true}/>)}
       </Slider>
     </div>
   );
@@ -38,7 +38,7 @@ const HotPlaceTitle = () => {
   );
 };
 
-export const tempData: HotPlaceCardProps[] = [
+export const tempData: PlaceCardProps[] = [
   {placeName: '편백숲체험농장', address: '대구시 동구', rating: 4.7, visitCount: 136, distance: '8.6km'},
   {placeName: 'A장소', address: 'A주소', rating: 4.7, visitCount: 136, distance: '8.6km'},
   {placeName: 'B장소', address: 'B주소', rating: 4.7, visitCount: 136, distance: '8.6km'},

@@ -1,10 +1,10 @@
 import {Box, Button, Grid, Tab, Tabs} from "@mui/material";
 import {a11yProps, TabPanel} from "./TabPanel";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../store";
+import {RootState} from "../../../store";
 import {NormalPlaceAction} from "./NormalPlaceReducer";
 import React, {useEffect} from "react";
-import HotPlaceCard from "../HotPlace/HotPlaceCard";
+import PlaceCard from "../PlaceCard";
 import {tempData} from "../HotPlace/HotPlace";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
@@ -34,25 +34,25 @@ export default function NormalPlace() {
         <Tab label="별점순" value={1} {...a11yProps(1)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <PlaceCardList/>
+        <NormalPlaceCardList/>
         <SeeMoreButton handleClickSeeMoreButton={handleClickSeeMoreButton}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <PlaceCardList/>
+        <NormalPlaceCardList/>
         <SeeMoreButton handleClickSeeMoreButton={handleClickSeeMoreButton}/>
       </TabPanel>
     </Box>
   );
 }
 
-const PlaceCardList = () => {
+const NormalPlaceCardList = () => {
   const data = useSelector((state: RootState) => state.NormalPlaceReducer.data);
   return (
     <Grid container spacing={3}>
       {data.map(data =>
         <Grid item xs={4} key={data.placeName}>
-          <HotPlaceCard placeName={data.placeName} address={data.address} rating={data.rating}
-                        visitCount={data.visitCount} distance={data.distance} isHotPlaceCard={false}/>
+          <PlaceCard placeName={data.placeName} address={data.address} rating={data.rating}
+                     visitCount={data.visitCount} distance={data.distance} isHotPlaceCard={false}/>
         </Grid>)}
     </Grid>
   )

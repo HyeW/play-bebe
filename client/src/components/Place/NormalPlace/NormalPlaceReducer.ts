@@ -1,5 +1,5 @@
 // action
-import {HotPlaceCardProps} from "../HotPlace/HotPlaceCard";
+import {PlaceCardProps} from "../PlaceCard";
 
 const HEADER = 'NormalPlaceReducer';
 const TYPE = {
@@ -9,7 +9,7 @@ const TYPE = {
 
 export const NormalPlaceAction = {
   setValue: (value: number) => ({type: TYPE.SET_VALUE, payload: value}),
-  setData: (data: HotPlaceCardProps[]) => ({type: TYPE.SET_DATA, payload: data}),
+  setData: (data: PlaceCardProps[]) => ({type: TYPE.SET_DATA, payload: data}),
 };
 
 type NormalPlaceActionType =
@@ -20,7 +20,7 @@ type NormalPlaceActionType =
 // state
 type NormalPlaceState = {
   value: number,
-  data: HotPlaceCardProps[],
+  data: PlaceCardProps[],
 }
 
 const INIT_NORMAL_PLACE_STATE: NormalPlaceState = {
