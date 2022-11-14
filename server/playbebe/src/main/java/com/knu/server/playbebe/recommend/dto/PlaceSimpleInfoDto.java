@@ -16,8 +16,8 @@ public class PlaceSimpleInfoDto {
     private int wantToVisit;
     private double distance;
 
-    // wantToVisit - ½ºÅ©·¦ ¸ğµ¨ Ãß°¡
-    // distance - °Å¸® °è»ê Ãß°¡ (ÁÂÇ¥°è : ÁßºÎ¿øÁ¡TM(EPSG:2097) -> À§µµ°æµµ)
+    // wantToVisit - ìŠ¤í¬ë© ëª¨ë¸ ì¶”ê°€
+    // distance - ê±°ë¦¬ ê³„ì‚° ì¶”ê°€ (ì¢Œí‘œê³„ : ì¤‘ë¶€ì›ì TM(EPSG:2097) -> ìœ„ë„ê²½ë„)
     public PlaceSimpleInfoDto(Place place) {
         this.name = place.getEstablishmentName();
         this.simpleAddress = place.getAddress();

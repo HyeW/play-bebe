@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class TimeStamped {
 
-    @CreatedDate    // ÃÖÃÊ »ı¼º ½ÃÁ¡
+    @CreatedDate    // ìµœì´ˆ ìƒì„± ì‹œì 
     private LocalDateTime createdAt;
 
-    @LastModifiedDate   // ¸¶Áö¸· º¯°æ ½ÃÁ¡
+    @LastModifiedDate   // ë§ˆì§€ë§‰ ë³€ê²½ ì‹œì 
     private LocalDateTime modifiedAt;
 
 }
