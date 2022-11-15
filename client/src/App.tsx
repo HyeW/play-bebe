@@ -16,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login/>}></Route>
           <Route path="/signup" element={<SignUp/>}></Route>
+          <Route path="/where-to-go" element={<Main/>}></Route>
           {/* 상단에 위치하는 라우트들의 규칙을 모두 확인, 일치하는 라우트가 없는 경우 처리 */}
           <Route path="*" element={<Main/>}></Route>
         </Routes>
