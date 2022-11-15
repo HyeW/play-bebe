@@ -19,14 +19,15 @@ import javax.ws.rs.Path;
 public class DetailController {
     private final DetailService detailService;
 
-    // 이름, 주소, 전화번호, 방문해요 수, 날씨, 리뷰 1개, 사진
-    @GetMapping("/detail{placeId}")
+    // 이름, 주소, 전화번호, 방문해요 수, 날씨, 리뷰 1개, 사진, 거리
+    @GetMapping("/detail/{placeId}")
     public DetailDto getDetail(@PathVariable long placeId){
         DetailDto detailDto = new DetailDto();
         detailDto = detailService.getPlaceInfo(placeId); // 이름,주소,전화번호
         detailDto = detailService.getVisitInfo(detailDto, placeId); // 방문 정보
         detailDto = detailService.getWeatherInfo(detailDto, placeId); //날씨 정보
         detailDto = detailService.getReview(detailDto, placeId); // 리뷰1개, 사진
+        detailDto = detailService.getDistance(detailDto);
         return detailDto;
     }
 
