@@ -52,6 +52,10 @@ const NormalPlaceCardList = () => {
   const handleClickPlaceCard = (data: PlaceCardProps) => {
     dispatch(PlaceDialogAction.setOpenPlaceDialog(true));
     dispatch(PlaceDialogAction.setPlaceName(data.placeName));
+    dispatch(PlaceDialogAction.setAddress(data.address));
+    dispatch(PlaceDialogAction.setRating(data.rating));
+    dispatch(PlaceDialogAction.setDistance(data.distance));
+    dispatch(PlaceDialogAction.setVisitCount(data.visitCount));
   };
 
   return (

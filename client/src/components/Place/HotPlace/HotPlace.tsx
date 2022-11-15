@@ -4,8 +4,13 @@ import "slick-carousel/slick/slick-theme.css";
 import "./HotPlace.css";
 import {Typography} from "@mui/material";
 import PlaceCard, {PlaceCardProps} from "../PlaceCard";
+import {PlaceDialogAction} from "../PlaceDialogReducer";
+import {useDispatch} from "react-redux";
+import React from "react";
 
 export default function HotPlace() {
+  const dispatch = useDispatch();
+
   const settings = {
     dots: true,
     infinite: true,
@@ -13,6 +18,16 @@ export default function HotPlace() {
     slidesToShow: 3,
     slidesToScroll: 3,
     variableWidth: true,
+    draggable: false,
+  };
+
+  const handleClickPlaceCard = (data: PlaceCardProps) => {
+    dispatch(PlaceDialogAction.setOpenPlaceDialog(true));
+    dispatch(PlaceDialogAction.setPlaceName(data.placeName));
+    dispatch(PlaceDialogAction.setAddress(data.address));
+    dispatch(PlaceDialogAction.setRating(data.rating));
+    dispatch(PlaceDialogAction.setDistance(data.distance));
+    dispatch(PlaceDialogAction.setVisitCount(data.visitCount));
   };
 
   return (
@@ -21,7 +36,8 @@ export default function HotPlace() {
       <Slider {...settings}>
         {tempData.map(data =>
           <PlaceCard key={data.placeName} placeName={data.placeName} address={data.address} rating={data.rating}
-                     visitCount={data.visitCount} distance={data.distance} isHotPlaceCard={true}/>)}
+                     visitCount={data.visitCount} distance={data.distance} isHotPlaceCard={true}
+                     onClick={() => handleClickPlaceCard(data)}/>)}
       </Slider>
     </div>
   );
