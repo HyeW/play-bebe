@@ -13,23 +13,26 @@ export default function NormalPlace() {
   const dispatch = useDispatch();
   const tabValue = useSelector((state: RootState) => state.NormalPlaceReducer.tabValue);
   const data = useSelector((state: RootState) => state.NormalPlaceReducer.data);
+  const seeMoreCount = useSelector((state: RootState) => state.NormalPlaceReducer.seeMoreCount);
 
   useEffect(() => {
     dispatch(NormalPlaceAction.setData(tempData));
   }, []);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
     dispatch(NormalPlaceAction.setData(tempData));
     dispatch(NormalPlaceAction.setTabValue(newValue));
+    dispatch(NormalPlaceAction.setSeeMoreCount(0));
   };
 
   const handleClickSeeMoreButton = () => {
     dispatch(NormalPlaceAction.setData(data.concat(tempData)));
+    dispatch(NormalPlaceAction.setSeeMoreCount(seeMoreCount + 1));
   };
 
   return (
     <Box mt={5}>
-      <Tabs value={tabValue} onChange={handleChange} aria-label="place tabs">
+      <Tabs value={tabValue} onChange={handleChangeTab} aria-label="place tabs">
         <Tab label="거리순" value={0} {...a11yProps(0)}/>
         <Tab label="별점순" value={1} {...a11yProps(1)} />
       </Tabs>
