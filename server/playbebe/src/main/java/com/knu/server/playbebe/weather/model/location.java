@@ -10,20 +10,20 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Table(name = "location")
-public class Location {
+public class location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String phaseOne;
+    private String phase_one;
 
     @Column
-    private String phaseTwo;
+    private String phase_two;
 
     @Column
-    private String phaseThree;
+    private String phase_three;
 
     @Column(nullable = false)
     private String X;
@@ -31,10 +31,10 @@ public class Location {
     @Column(nullable = false)
     private String Y;
 
-    public Location(String phaseOne, String phaseTwo, String phaseThree, String X, String Y) {
-        this.phaseOne = phaseOne;
-        this.phaseTwo = phaseTwo;
-        this.phaseThree = phaseThree;
+    public location(String phase_one, String phase_two, String phase_three, String X, String Y) {
+        this.phase_one = phase_one;
+        this.phase_two = phase_two;
+        this.phase_three = phase_three;
         this.X = X;
         this.Y = Y;
     }
