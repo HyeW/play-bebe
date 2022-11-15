@@ -1,4 +1,4 @@
-package com.knu.server.playbebe.detailAPI.dto;
+package com.knu.server.playbebe.detail.dto;
 
 import com.knu.server.playbebe.weather.dto.WeatherDto;
 import lombok.Getter;

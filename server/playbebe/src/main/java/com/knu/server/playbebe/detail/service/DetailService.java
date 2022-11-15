@@ -1,6 +1,13 @@
-package com.knu.server.playbebe.weather.service;
-import com.knu.server.playbebe.weather.dto.DateTimeDto;
+package com.knu.server.playbebe.detail.service;
+import com.knu.server.playbebe.detail.dto.DetailDto;
+import com.knu.server.playbebe.recommend.model.Place;
+import com.knu.server.playbebe.recommend.repository.PlaceRepository;
+import com.knu.server.playbebe.review.model.Review;
+import com.knu.server.playbebe.review.repository.ReviewRepository;
+import com.knu.server.playbebe.visit.model.Visit;
+import com.knu.server.playbebe.visit.repository.VisitRepository;
 import com.knu.server.playbebe.weather.dto.CoordinateDto;
+import com.knu.server.playbebe.weather.dto.DateTimeDto;
 import com.knu.server.playbebe.weather.dto.RegionNameDto;
 import com.knu.server.playbebe.weather.dto.WeatherDto;
 import com.knu.server.playbebe.weather.model.location;
@@ -14,15 +21,73 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class WeatherService {
+public class DetailService {
+    private final PlaceRepository placeRepository;
+    private final VisitRepository visitRepository;
+    private final ReviewRepository reviewRepository;
     private final LocationRepository locationRepository;
+    public DetailDto getPlaceInfo(long id){
+        DetailDto detailDto = new DetailDto();
+        Optional<Place> place_ = placeRepository.findById(id);
+        Place place = place_.get();
+        String placeName = place.getEstablishmentName();
+        String placeAddress = place.getAddress();
+        String placeTelephone = place.getTelephone();
+        detailDto.setPlaceInfo(placeName,placeAddress,placeTelephone);
+        return detailDto;
+    }
+
+    public DetailDto getVisitInfo(DetailDto detailDto, long id){
+        List<Visit> visit_ = visitRepository.findAllByPlace_Id(id);
+        int visit_count = visit_.size();
+        detailDto.setVisitInfo(visit_count);
+        return detailDto;
+    }
+
+    public DetailDto getWeatherInfo(DetailDto detailDto, long id) throws IOException, JSONException {
+        DateTimeDto dateTimeDto = getCurDateTime(); // 현재 시간 정보
+        RegionNameDto regionNameDto = getRegionName(id);
+        CoordinateDto coordinateDto = getCurX_Y(regionNameDto); // 현재 위치에 따른 X,Y 좌료
+        String JSONdata = getJSONdata(coordinateDto, dateTimeDto); // 날씨 JSON 정보
+        WeatherDto weather = getWeather(JSONdata); // JSON 파싱해서 원하는 값 추출
+        detailDto.setWeather(weather);
+        return detailDto;
+    }
+
+    public DetailDto getReview(DetailDto detailDto, long id){
+        List<Review> review_ =  reviewRepository.findAllByPlace_Id(id);
+        String reviewContent = review_.get(0).getContent();
+        detailDto.setReview(reviewContent,null);
+        return detailDto;
+    }
+
+    public DetailDto getDistance(DetailDto detailDto){
+        // 현재 위치의 좌표 구하기
+
+        // 해당 장소의 좌표 구하기
+        return null;
+    }
+
+
+
+    // 날씨 관련 함수들
+    public RegionNameDto getRegionName(long id){
+        String placeAddrss = placeRepository.findById(id).get().getAddress();
+        String siName = "";
+        String guName = "";
+        return new RegionNameDto(siName,guName);
+    }
+
     public DateTimeDto getCurDateTime(){ // 현재 시간 정보
         // 오늘 날짜
         LocalDate now = LocalDate.now();
@@ -51,12 +116,11 @@ public class WeatherService {
         return new DateTimeDto(date,time);
     }
 
-    // OO시,OO구,00동으로 좌표값 가져오기
     public CoordinateDto getCurX_Y(RegionNameDto regionNameDto){
-    Optional<location> location = locationRepository.findById((long)0);
-    String X = location.get().getX();
-    String Y = location.get().getY();
-    return new CoordinateDto(X,Y);
+        Optional<location> location = locationRepository.findById((long)0);
+        String X = location.get().getX();
+        String Y = location.get().getY();
+        return new CoordinateDto(X,Y);
     }
 
     // 날씨 API JSON으로 가져오기
