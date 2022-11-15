@@ -55,5 +55,4 @@ public class GetLocation {
             System.err.println("error = " + ee.toString());
         }
     }
-
 }
