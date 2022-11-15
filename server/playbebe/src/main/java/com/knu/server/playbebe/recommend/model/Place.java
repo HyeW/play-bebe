@@ -44,6 +44,12 @@ public class Place {
     private double coordinateY;
 
     @Column
+    private double latitude;
+
+    @Column
+    private double longitude;
+
+    @Column
     private double totalRating;
 
     @OneToMany(mappedBy="place")

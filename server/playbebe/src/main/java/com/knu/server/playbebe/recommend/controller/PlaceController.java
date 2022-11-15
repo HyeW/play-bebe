@@ -23,4 +23,9 @@ public class PlaceController {
     public List<PlaceSimpleInfoDto> listOfPlacesOrderByStars(int page) {
         return placeService.orderByStars(page);
     }
+
+    @GetMapping("/distance")
+    public List<PlaceSimpleInfoDto> listOfPlacesOrderByDistance(int page) {
+        return placeService.orderByDistance(page);
+    }
 }
