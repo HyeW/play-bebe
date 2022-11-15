@@ -1,15 +1,14 @@
 import {Box, Grid, Rating, Skeleton, Stack, Typography} from "@mui/material";
 import React from "react";
 
-interface ReviewCardProps extends ReviewTitleProps, ReviewContentProps, ReviewInfoProps {
-}
+export interface ReviewCardProps extends ReviewTitleProps, ReviewContentProps, ReviewInfoProps {}
 
 export default function ReviewCard({placeName, address, content, visitDate, createDate, nickname, rating, index}: ReviewCardProps) {
   return (
     <Box my={5}>
       <ReviewTitle placeName={placeName} address={address}/>
       <Grid container spacing={3}>
-        {index%2 === 0 &&
+        {index !== undefined && index%2 === 0 &&
             <Grid item xs>
                 <ReviewImage/>
             </Grid>}
@@ -17,7 +16,7 @@ export default function ReviewCard({placeName, address, content, visitDate, crea
           <ReviewContent content={content}/>
           <ReviewInfo visitDate={visitDate} createDate={createDate} nickname={nickname} rating={rating} index={index}></ReviewInfo>
         </Grid>
-        {index%2 === 1 &&
+        {index !== undefined && index%2 === 1 &&
             <Grid item xs>
                 <ReviewImage/>
             </Grid>}
@@ -68,12 +67,12 @@ interface ReviewInfoProps {
   createDate: string,
   nickname: string,
   rating: number,
-  index: number,
+  index?: number,
 }
 
 const ReviewInfo = ({visitDate, createDate, nickname, rating, index}: ReviewInfoProps) => {
   return (
-    <Stack sx={{display: 'flex', alignItems: index%2 === 1 ? 'start' : 'end', mt: 3}}>
+    <Stack sx={{display: 'flex', alignItems: index && (index%2 === 1) ? 'start' : 'end', mt: 3}}>
       <Typography color="text.secondary">방문일자 {visitDate}</Typography>
       <Typography color="text.secondary">작성일자 {createDate}</Typography>
       <Typography color="text.secondary">작성자 {nickname}</Typography>

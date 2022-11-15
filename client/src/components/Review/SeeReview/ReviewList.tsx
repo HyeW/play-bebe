@@ -1,17 +1,36 @@
 import ReviewCard from "./ReviewCard";
+import {SeeMoreButton} from "../../Place/NormalPlace/NormalPlace";
+import {useDispatch, useSelector} from "react-redux";
+import {SeeReviewAction} from "./SeeReviewReducer";
+import {RootState} from "../../../store";
+import {useEffect} from "react";
 
 export default function ReviewList() {
+  const dispatch = useDispatch();
+  const reviewData = useSelector((state: RootState) => state.SeeReviewReducer.reviewData);
+  const seeMoreCount = useSelector((state: RootState) => state.SeeReviewReducer.seeMoreCount);
+
+  useEffect(() => {
+    dispatch(SeeReviewAction.setReviewData(tempReviewData));
+  }, []);
+
+  const handleClickSeeMoreButton = () => {
+    dispatch(SeeReviewAction.setReviewData(reviewData.concat(reviewData)));
+    dispatch(SeeReviewAction.setSeeMoreCount(seeMoreCount + 1));
+  };
+
   return (
     <div>
       {reviewData.map((data, index) =>
         <ReviewCard placeName={data.placeName} address={data.address} content={data.content} visitDate={data.visitDate}
                     createDate={data.createDate} nickname={data.nickname} rating={data.rating} index={index}/>
       )}
+      <SeeMoreButton handleClickSeeMoreButton={handleClickSeeMoreButton}/>
     </div>
   );
 }
 
-const reviewData = [
+const tempReviewData = [
   {
     placeName: '성남큐브미술관',
     address: '경기도 성남시',
