@@ -5,6 +5,7 @@ import SignUpReducer from "./components/SignUp/SignUpReducer";
 import NormalPlaceReducer from "./components/Place/NormalPlace/NormalPlaceReducer";
 import PlaceDialogReducer from "./components/Place/PlaceDialogReducer";
 import SeeReviewReducer from "./components/Review/SeeReview/SeeReviewReducer";
+import WriteReviewReducer from "./components/Review/WriteReview/WriteReviewReducer";
 
 const rootReducer = combineReducers({
   MenuBarReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   NormalPlaceReducer,
   PlaceDialogReducer,
   SeeReviewReducer,
+  WriteReviewReducer,
 })
 
 export default rootReducer;
