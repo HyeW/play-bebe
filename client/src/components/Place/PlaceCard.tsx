@@ -2,37 +2,39 @@ import {Box, Skeleton, Stack, Typography} from "@mui/material";
 import {amber} from "@mui/material/colors";
 import React from "react";
 
-export interface HotPlaceCardProps extends HotPlaceCardTextProps, HotPlaceCardIconProps, HotPlaceCardImageProps {}
+export interface PlaceCardProps extends PlaceCardTextProps, PlaceCardIconProps, PlaceCardImageProps {
+  onClick?: ()=>void,
+}
 
-export default function HotPlaceCard({placeName, address, rating, visitCount, distance, isHotPlaceCard}: HotPlaceCardProps) {
+export default function PlaceCard({placeName, address, rating, visitCount, distance, isHotPlaceCard, onClick}: PlaceCardProps) {
   return (
-    <>
-      <HotPlaceCardImage isHotPlaceCard={isHotPlaceCard}/>
+    <div onClick={onClick}>
+      <PlaceCardImage isHotPlaceCard={isHotPlaceCard}/>
       <Stack direction="row" mt={1}>
-        <HotPlaceCardText placeName={placeName} address={address}/>
+        <PlaceCardText placeName={placeName} address={address}/>
         <Box flexGrow={1}/>
-        <HotPlaceCardIcon rating={rating} visitCount={visitCount} distance={distance}/>
+        <PlaceCardIcon rating={rating} visitCount={visitCount} distance={distance}/>
       </Stack>
-    </>
+    </div>
   );
 }
 
-interface HotPlaceCardImageProps {
+interface PlaceCardImageProps {
   isHotPlaceCard?: boolean,
 }
 
-const HotPlaceCardImage = ({isHotPlaceCard}: HotPlaceCardImageProps) => {
+const PlaceCardImage = ({isHotPlaceCard}: PlaceCardImageProps) => {
   return (
     <Skeleton variant="rectangular" width={isHotPlaceCard ? 350 : '100%'} height={200} sx={{mt: 1}}/>
   );
 };
 
-interface HotPlaceCardTextProps {
+interface PlaceCardTextProps {
   placeName: string,
   address: string,
 }
 
-const HotPlaceCardText = ({placeName, address}: HotPlaceCardTextProps) => {
+const PlaceCardText = ({placeName, address}: PlaceCardTextProps) => {
   return (
     <Stack direction="column">
       <Typography sx={{fontWeight: 600}} color="text.primary">{placeName}</Typography>
@@ -41,13 +43,13 @@ const HotPlaceCardText = ({placeName, address}: HotPlaceCardTextProps) => {
   );
 };
 
-interface HotPlaceCardIconProps {
+interface PlaceCardIconProps {
   rating: number,
   visitCount: number,
   distance: string,
 }
 
-const HotPlaceCardIcon = ({rating, visitCount, distance}: HotPlaceCardIconProps) => {
+const PlaceCardIcon = ({rating, visitCount, distance}: PlaceCardIconProps) => {
   return (
     <Stack direction="column">
       <Stack direction="row" spacing={2}>

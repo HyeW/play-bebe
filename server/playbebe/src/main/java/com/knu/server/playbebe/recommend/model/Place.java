@@ -38,10 +38,10 @@ public class Place {
     private String establishmentName;
 
     @Column
-    private double latitude;
+    private double coordinateX;
 
     @Column
-    private double longitude;
+    private double coordinateY;
 
     @Column
     private double totalRating;
