@@ -46,7 +46,7 @@ public class Place {
     @Column
     private double totalRating;
 
-    @OneToMany(mappedBy="place")
+    @OneToMany(mappedBy="place", cascade = CascadeType.ALL)
     private List<Review> messages;
 
 }
