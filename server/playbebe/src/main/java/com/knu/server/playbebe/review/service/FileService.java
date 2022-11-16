@@ -19,7 +19,7 @@ public class FileService {
     @Value("${file.path}")
     private String filePath;
 
-    //È®ÀåÀÚ ÃßÃâ
+    //í™•ì¥ì ì¶”ì¶œ
     public String extractExt(String originalFilename){
         int idx = originalFilename.lastIndexOf(".");
         String ext = originalFilename.substring(idx);
@@ -28,7 +28,7 @@ public class FileService {
         return ext;
     }
 
-    //ÀúÀåÇÒ ÆÄÀÏ ÀÌ¸§ ±¸¼º
+    //ì €ì¥ ê²½ë¡œ ìƒì„±
     public String createStoreFilename(String originalFilename){
         String uuid = UUID.randomUUID().toString();
         String ext = extractExt(originalFilename);
@@ -37,7 +37,7 @@ public class FileService {
         return storeFilename;
     }
 
-    //ÆÄÀÏ ½ÇÁ¦ ÀúÀå
+    //íŒŒì¼ ì €ì¥
     public Image storeFile(MultipartFile multipartFile) throws IOException {
 
         String storePath = createStoreFilename(multipartFile.getOriginalFilename());
@@ -50,7 +50,7 @@ public class FileService {
                 .build();
     }
 
-    //ÆÄÀÏ µé°í ¿À±â
+    //íŒŒì¼ ì°¾ê¸°
     public FileSystemResource findFile(String path) throws FileNotFoundException {
         FileSystemResource resource = new FileSystemResource(path);
         if(!resource.exists()){

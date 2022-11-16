@@ -38,15 +38,23 @@ public class Place {
     private String establishmentName;
 
     @Column
-    private double latitude;
+    private Double latitude;
 
     @Column
-    private double longitude;
+    private Double longitude;
 
     @Column
-    private double totalRating;
+    private Double totalRating;
 
     @OneToMany(mappedBy="place", cascade = CascadeType.ALL)
     private List<Review> messages;
 
+    //총 별점 계산하기
+    public void setTotalRating(int rating){
+        if(this.totalRating == null) {
+            this.totalRating = Double.valueOf(0);
+        }
+
+        this.totalRating = ((this.totalRating * messages.size()) + rating)/(messages.size()+1);
+    }
 }
