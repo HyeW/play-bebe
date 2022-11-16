@@ -48,7 +48,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         //서명이 정상적으로 됨
         if(email != null){
             System.out.println("email 정상");
-            User user = userRepository.findByNickname(email);
+            User user = userRepository.findByEmail(email);
             PrincipalDetails principalDetails = new PrincipalDetails(user);
             Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
 
