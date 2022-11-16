@@ -13,7 +13,7 @@ import javax.persistence.Embeddable;
 public class Image {
     private String originalFilename;
     private String storePath;
-    //ÆÄÀÏ È®ÀåÀÚ Á¾·ù
+    //íŒŒì¼ í™•ì¥ì ì¢…ë¥˜
 
     @Builder
     public Image(String originalFilename, String storePath) {

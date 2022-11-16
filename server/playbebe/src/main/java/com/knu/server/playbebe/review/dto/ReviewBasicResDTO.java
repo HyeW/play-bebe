@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 @Getter
 public class ReviewBasicResDTO {
 
-    private String content;         //¸®ºä ³»¿ë
-    private int rating;             //º°Á¡
-    private LocalDate visitDate;    //¹æ¹® ³¯Â¥
-    private LocalDate createDate;   //¸®ºä »ı¼º ³¯Â¥
-    private String nickname;        //»ç¿ëÀÚ ´Ğ³×ÀÓ
-    private Long placeId;           //À¯¿øÁö pk
-    private String establishmentName;       //À¯¿øÁö ÀÌ¸§
-    private String address;                 //À¯¿øÁö ÁÖ¼Ò
+    private String content;         //ë¦¬ë·° ë‚´ìš©
+    private int rating;             //ë¦¬ë·° ë³„ì 
+    private LocalDate visitDate;    //ë°©ë¬¸ ë‚ ì§œ
+    private LocalDate createDate;   //ìƒì„± ë‚ ì§œ
+    private String nickname;        //ì‚¬ìš©ì ë‹‰ë„¤ì„
+    private Long placeId;           //ìœ ì›ì§€ pk
+    private String establishmentName;       //ìœ ì›ì§€ ì´ë¦„
+    private String address;                 //ìœ ì›ì§€ ì£¼ì†Œ
 
     @Builder
     public ReviewBasicResDTO(String content, int rating, LocalDate visitDate,

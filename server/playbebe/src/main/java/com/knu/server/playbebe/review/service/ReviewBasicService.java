@@ -32,6 +32,7 @@ public class ReviewBasicService {
     public String insertReview(ReviewCreateDTO reviewCreateDTO, MultipartFile multipartFile) throws IOException {
         User user = userRepository.findByEmail(reviewCreateDTO.getEmail());
         Optional<Place> place = placeRepository.findById(reviewCreateDTO.getPlaceId());
+        place.get().setTotalRating(reviewCreateDTO.getRating());
 
         Image image = null;
         if(multipartFile != null) {
@@ -60,7 +61,7 @@ public class ReviewBasicService {
 
         for(Review r : reviewList){
             ReviewBasicResDTO basicResDTO =
-                    new ReviewBasicResDTO(r.getContent(), r.getRating(),r.getVisitDate(), r.getCreatedAt(),
+                    new ReviewBasicResDTO(r.getContent(), r.getRating(), r.getVisitDate(), r.getCreatedAt(),
                             r.getUser().getNickname(), r.getPlace().getId(),
                             r.getPlace().getEstablishmentName(), r.getPlace().getAddress());
 
