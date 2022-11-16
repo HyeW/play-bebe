@@ -29,7 +29,11 @@ public class Review extends TimeStamped{
     @Column
     private LocalDate visitDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Column
+    @Embedded
+    private Image image;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
     private Place place;
 
@@ -38,12 +42,13 @@ public class Review extends TimeStamped{
     private User user;
 
     @Builder
-    public Review(String content, int rating, LocalDate visitDate, Place place, User user) {
+    public Review(String content, int rating, LocalDate visitDate, Place place, User user, Image image) {
         this.content = content;
         this.rating = rating;
         this.visitDate = visitDate;
         this.place = place;
         setPlace(place);
+        this.image = image;
         this.user = user;
     }
 

@@ -35,7 +35,7 @@ public class User {
     @Column
     private String roles; //ROLE_USER, ROLE_ADMIN
 
-    //roleÀÌ ÇÏ³ªÀÇ À¯Àú´ç 2°³ÀÌ»ó µé°í ÀÖÀ»¶§ ÇÊ¿äÇÑ ÇÔ¼ö
+    //roleì´ í•˜ë‚˜ì˜ ìœ ì €ë‹¹ 2ê°œì´ìƒ ë“¤ê³  ìˆì„ë•Œ í•„ìš”í•œ í•¨ìˆ˜
     public List<String> getRoleList(){
         if(this.roles.length() > 0){
             return Arrays.asList(this.roles.split(","));

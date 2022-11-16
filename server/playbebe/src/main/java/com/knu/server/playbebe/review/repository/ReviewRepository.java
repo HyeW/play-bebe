@@ -15,6 +15,8 @@ public class ReviewRepository {
 
     public void saveReview(Review review){em.persist(review);}
 
+    public Review findReview(Long id){return em.find(Review.class, id);}
+
     public List<Review> findLatestReview(){
         return em.createQuery("select r from Review r order by r.createdAt desc",Review.class)
                 .setFirstResult(0)
