@@ -1,8 +1,9 @@
 import React, {ChangeEvent} from "react";
-import {Box, Rating, TextField, Typography} from "@mui/material";
+import {Box, InputAdornment, Rating, TextField, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../store";
 import {WriteReviewAction} from "./WriteReviewReducer";
+import SearchIcon from "@mui/icons-material/Search";
 
 export default function ReviewInput() {
   const dispatch = useDispatch();
@@ -38,6 +39,13 @@ const WhereTextField = (props: {
       onChange={props.onChange}
       value={props.value}
       fullWidth
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <SearchIcon/>
+          </InputAdornment>
+        ),
+      }}
     />
   </>
 };
