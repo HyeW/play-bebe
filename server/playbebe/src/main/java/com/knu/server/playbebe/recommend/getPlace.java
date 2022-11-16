@@ -45,7 +45,7 @@ public class getPlace {
         br.readLine(); // 첫번째 줄 생략
 
         try{
-            String query = "insert into Place(curStatus,telephone,postalCode,address,roadNameAddress,establishmentName,latitude,longitude) values (?,?,?,?,?,?,?,?)";
+            String query = "insert into place(cur_status,telephone,postal_code,address,road_name_address,establishment_name,coordinatex,coordinatey) values (?,?,?,?,?,?,?,?)";
             pstmt = conn.prepareStatement(query);
 
             while((line = br.readLine())!=null){
@@ -56,10 +56,10 @@ public class getPlace {
                 String address = temp[18];
                 String roadNameAddress = temp[19];
                 String establishmentName = temp[21];
-                double latitude = 0;
-                double longitude = 0;
-                if (!temp[26].equals("")) latitude = Double.parseDouble(temp[26]);
-                if (!temp[27].equals("")) longitude = Double.parseDouble(temp[27]);
+                double coordinateX = 0;
+                double coordinateY = 0;
+                if (!temp[26].equals("")) coordinateX = Double.parseDouble(temp[26]);
+                if (!temp[27].equals("")) coordinateY = Double.parseDouble(temp[27]);
 
                 pstmt.setString(1,curStatus);
                 pstmt.setString(2,telephone);
@@ -67,8 +67,8 @@ public class getPlace {
                 pstmt.setString(4,address);
                 pstmt.setString(5,roadNameAddress);
                 pstmt.setString(6,establishmentName);
-                pstmt.setDouble(7,latitude);
-                pstmt.setDouble(8,longitude);
+                pstmt.setDouble(7,coordinateX);
+                pstmt.setDouble(8,coordinateY);
                 pstmt.executeUpdate();
                 System.out.println("insert 성공!");
             }

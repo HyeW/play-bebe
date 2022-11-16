@@ -26,6 +26,7 @@ public class GetLocation {
         String id = new PersonalInfo().getId();
         String pass = new PersonalInfo().getPassword();
         conn = DriverManager.getConnection(url,id,pass);
+        System.out.println("connection" + conn);
     }
     public static void insertQuery() throws IOException {
         String path = "C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/location.csv";
@@ -33,7 +34,7 @@ public class GetLocation {
         String line = null;
         br.readLine(); // 첫번째 줄 생략
         try{
-            String query = "insert into Location(phase_1,phase_2,phase_3,X,Y) values (?,?,?,?,?)";
+            String query = "insert into location(phase_one,phase_two,phase_three,X,Y) values (?,?,?,?,?)";
             pstmt = conn.prepareStatement(query);
             while((line = br.readLine())!=null){
                 String[] tmp = line.split(",");
@@ -54,5 +55,4 @@ public class GetLocation {
             System.err.println("error = " + ee.toString());
         }
     }
-
 }
