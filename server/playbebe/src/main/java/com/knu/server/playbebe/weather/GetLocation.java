@@ -34,18 +34,18 @@ public class GetLocation {
         String line = null;
         br.readLine(); // 첫번째 줄 생략
         try{
-            String query = "insert into location(phase_one,phase_two,phase_three,X,Y) values (?,?,?,?,?)";
+            String query = "insert into location(phase1,phase2,phase3,X,Y) values (?,?,?,?,?)";
             pstmt = conn.prepareStatement(query);
             while((line = br.readLine())!=null){
                 String[] tmp = line.split(",");
-                String phase_1 = tmp[2];
-                String phase_2 = tmp[3];
-                String phase_3 = tmp[4];
+                String phase1 = tmp[2];
+                String phase2 = tmp[3];
+                String phase3 = tmp[4];
                 int X = Integer.parseInt(tmp[5]);
                 int Y = Integer.parseInt(tmp[6]);
-                pstmt.setString(1,phase_1);
-                pstmt.setString(2,phase_2);
-                pstmt.setString(3,phase_3);
+                pstmt.setString(1,phase1);
+                pstmt.setString(2,phase2);
+                pstmt.setString(3,phase3);
                 pstmt.setInt(4,X);
                 pstmt.setInt(5,Y);
                 pstmt.executeUpdate();

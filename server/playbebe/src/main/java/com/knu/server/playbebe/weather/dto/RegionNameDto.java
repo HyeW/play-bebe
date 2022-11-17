@@ -8,11 +8,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class RegionNameDto {
-    private String siName;
-    private String guName;
+    private String phase1;
+    private String phase2;
 
-    public RegionNameDto(String siName, String guName){
-        this.siName = siName;
-        this.guName = guName;
+    public RegionNameDto(String phase1, String phase2){
+        this.phase1 = phase1;
+        this.phase2 = phase2;
     }
+
 }
