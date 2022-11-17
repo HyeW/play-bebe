@@ -47,7 +47,7 @@ public class getPlace {
         String path = curPath + "/src/main/resources/static/fulldata_03_07_09_P.csv";
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path),"euc-kr"));
         String line = null;
-        br.readLine(); // Ã¹¹øÂ° ÁÙ »ı·«
+        br.readLine(); // ì²«ë²ˆì§¸ ì¤„ ìƒëµ
 
         try{
             String query = "insert into place(cur_status,telephone,postal_code,address,road_name_address,establishment_name,coordinatex,coordinatey,latitude,longitude) values (?,?,?,?,?,?,?,?,?,?)";
@@ -79,7 +79,7 @@ public class getPlace {
                 pstmt.setDouble(9,projection[0]);
                 pstmt.setDouble(10,projection[1]);
                 pstmt.executeUpdate();
-                System.out.println("insert ¼º°ø!");
+                System.out.println("insert ì„±ê³µ!");
             }
         } catch(SQLException ee){
             System.err.println("error = " + ee.toString());

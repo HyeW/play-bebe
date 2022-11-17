@@ -32,7 +32,6 @@ public class UserService {
 
     @Transactional
     public String saveUser(UserJoinDto userJoinDto){
-        System.out.println("save ½ÇÇà");
         String bCryptPassword = bCryptPasswordEncoder.encode(userJoinDto.getPassword());
         userJoinDto.setPassword(bCryptPassword);
         User user = new User(userJoinDto);

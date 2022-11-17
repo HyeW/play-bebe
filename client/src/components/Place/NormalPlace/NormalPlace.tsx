@@ -77,7 +77,7 @@ interface SeeMoreButtonProps {
   handleClickSeeMoreButton: () => void,
 }
 
-const SeeMoreButton = ({handleClickSeeMoreButton}: SeeMoreButtonProps) => {
+export const SeeMoreButton = ({handleClickSeeMoreButton}: SeeMoreButtonProps) => {
   return (
     <Box sx={{display: 'flex', justifyContent: 'center'}} my={5}>
       <Button variant="contained" disableElevation size="large"
