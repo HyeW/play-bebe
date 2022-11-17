@@ -50,7 +50,7 @@ public class Place {
     private List<Review> messages;
 
     //총 별점 계산하기
-    public void setTotalRating(int rating){
+    public void setTotalRating(Double rating){
         if(this.totalRating == null) {
             this.totalRating = Double.valueOf(0);
         }

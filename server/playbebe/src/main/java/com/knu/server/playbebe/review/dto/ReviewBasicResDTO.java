@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class ReviewBasicResDTO {
 
     private String content;         //리뷰 내용
-    private int rating;             //리뷰 별점
+    private Double rating;             //리뷰 별점
     private LocalDate visitDate;    //방문 날짜
     private LocalDate createDate;   //생성 날짜
     private String nickname;        //사용자 닉네임
@@ -20,7 +20,7 @@ public class ReviewBasicResDTO {
     private String address;                 //유원지 주소
 
     @Builder
-    public ReviewBasicResDTO(String content, int rating, LocalDate visitDate,
+    public ReviewBasicResDTO(String content, Double rating, LocalDate visitDate,
                              LocalDateTime createDate, String nickname, Long placeId, String placeName, String address) {
         this.content = content;
         this.rating = rating;

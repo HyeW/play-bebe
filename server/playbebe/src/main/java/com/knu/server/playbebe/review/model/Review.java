@@ -24,7 +24,7 @@ public class Review extends TimeStamped{
     private String content;
 
     @Column
-    private int rating;
+    private Double rating;
 
     @Column
     private LocalDate visitDate;
@@ -42,7 +42,7 @@ public class Review extends TimeStamped{
     private User user;
 
     @Builder
-    public Review(String content, int rating, LocalDate visitDate, Place place, User user, Image image) {
+    public Review(String content, Double rating, LocalDate visitDate, Place place, User user, Image image) {
         this.content = content;
         this.rating = rating;
         this.visitDate = visitDate;
@@ -56,6 +56,5 @@ public class Review extends TimeStamped{
     public void setPlace(Place place){
         place.getMessages().add(this);
     }
-
 
 }

@@ -30,9 +30,9 @@ public class ReviewController {
     private final ReviewBasicService reviewBasicService;
     private final FileService fileService;
 
-    @GetMapping("")
-    public ResponseEntity<?> getLatestReview(){
-        ReviewListResDTO list = reviewBasicService.getLatestReview();
+    @GetMapping("/{page}")
+    public ResponseEntity<?> getLatestReview(@PathVariable int page){
+        ReviewListResDTO list = reviewBasicService.getLatestReview(page);
 
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }

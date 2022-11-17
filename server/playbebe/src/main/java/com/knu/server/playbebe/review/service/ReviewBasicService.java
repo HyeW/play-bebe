@@ -54,9 +54,9 @@ public class ReviewBasicService {
     }
 
     @Transactional
-    public ReviewListResDTO getLatestReview(){
+    public ReviewListResDTO getLatestReview(int page){
 
-        List<Review> reviewList =  reviewRepository.findLatestReview();
+        List<Review> reviewList =  reviewRepository.findLatestReviewList(page);
         ReviewListResDTO result = new ReviewListResDTO();
 
         for(Review r : reviewList){
