@@ -21,12 +21,22 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
 
-    public List<PlaceSimpleInfoDto> orderByStars(int page) {
+    public List<PlaceSimpleInfoDto> orderByStars(int page, double latitude, double longitude) {
         Pageable pageable = PageRequest.of(page, 6, Sort.by("totalRating").descending());
         Page<Place> placesOrderByStars = placeRepository.findAll(pageable);
 
         return placesOrderByStars.stream()
-                .map(PlaceSimpleInfoDto :: new)
+                .map(place -> new PlaceSimpleInfoDto(place, latitude, longitude))
                 .collect(Collectors.toList());
+    }
+
+    public List<PlaceSimpleInfoDto> orderByDistance(int page, double latitude, double longitude) {
+        List<Place> places = placeRepository.findAll();
+        List<PlaceSimpleInfoDto> simpleInfoDtos = places.stream()
+                .map(place -> new PlaceSimpleInfoDto(place, latitude, longitude))
+                .sorted()
+                .collect(Collectors.toList());
+
+        return simpleInfoDtos.subList(page * 6, (page + 1) * 6);
     }
 }

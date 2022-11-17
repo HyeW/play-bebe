@@ -6,5 +6,5 @@ import java.util.*;
 @Repository
 public interface LocationRepository extends JpaRepository<location, Long> {
 //  Location findByphaseOneAndphaseTwoAndPhaseThree(String phaseOne, String phaseTwo, String phaseThree);
-  List<location> findAllByPhaseOneAndPhaseTwo(String phaseOne, String phaseTwo);
+//  List<location> findAllByPhaseOneAndPhaseTwo(String phaseOne, String phaseTwo);
 }

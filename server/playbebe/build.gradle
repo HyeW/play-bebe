@@ -36,6 +36,9 @@ dependencies {
 
 	//jwt 라이브러리
 	implementation group: 'com.auth0', name: 'java-jwt', version: '4.2.1'
+
+	// proj4J 라이브러리
+	implementation 'org.locationtech.proj4j:proj4j:1.1.5'
 }
 
 tasks.named('test') {
