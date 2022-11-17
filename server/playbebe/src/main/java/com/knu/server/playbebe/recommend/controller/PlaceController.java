@@ -16,9 +16,9 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
-    @GetMapping("/stars/{page}")
-    public List<PlaceSimpleInfoDto> listOfPlacesOrderByStars(@PathVariable int page) {
-        return placeService.orderByStars(page);
+    @GetMapping("/stars/{page}/{latitude}/{longitude}")
+    public List<PlaceSimpleInfoDto> listOfPlacesOrderByStars(@PathVariable int page, @PathVariable double latitude, @PathVariable double longitude) {
+        return placeService.orderByStars(page, latitude, longitude);
     }
 
     @GetMapping("/distance/{page}/{latitude}/{longitude}")

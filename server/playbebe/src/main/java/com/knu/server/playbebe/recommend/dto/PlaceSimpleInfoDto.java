@@ -18,14 +18,6 @@ public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
     private int wantToVisit;
     private double distance;
 
-    public PlaceSimpleInfoDto(Place place) {
-        this.name = place.getEstablishmentName();
-        this.simpleAddress = place.getAddress();
-        this.totalRating = place.getTotalRating();
-        this.wantToVisit = 0;
-        this.distance = 0;
-    }
-
     public PlaceSimpleInfoDto(Place place, double latitude, double longitude) {
         this.name = place.getEstablishmentName();
         this.simpleAddress = place.getAddress();

@@ -21,12 +21,12 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
 
-    public List<PlaceSimpleInfoDto> orderByStars(int page) {
+    public List<PlaceSimpleInfoDto> orderByStars(int page, double latitude, double longitude) {
         Pageable pageable = PageRequest.of(page, 6, Sort.by("totalRating").descending());
         Page<Place> placesOrderByStars = placeRepository.findAll(pageable);
 
         return placesOrderByStars.stream()
-                .map(PlaceSimpleInfoDto :: new)
+                .map(place -> new PlaceSimpleInfoDto(place, latitude, longitude))
                 .collect(Collectors.toList());
     }
 
