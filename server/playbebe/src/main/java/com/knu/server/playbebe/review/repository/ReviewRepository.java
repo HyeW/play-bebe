@@ -23,10 +23,10 @@ public class ReviewRepository {
                 .getResultList();
     }
 
-    public List<Review> findLatestReview(){
+    public List<Review> findLatestReviewList(int page){
         return em.createQuery("select r from Review r order by r.createdAt desc",Review.class)
-                .setFirstResult(0)
-                .setMaxResults(10)
+                .setFirstResult(page*4)
+                .setMaxResults((page+1)*4)
                 .getResultList();
     }
 

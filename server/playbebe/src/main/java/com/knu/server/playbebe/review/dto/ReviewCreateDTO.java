@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class ReviewCreateDTO {
 
     private String content;
-    private int rating;
+    private Double rating;
     private LocalDate visitDate;
     private String email;
     private Long placeId;
