@@ -22,7 +22,7 @@ public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
         this.name = place.getEstablishmentName();
         this.simpleAddress = place.getAddress();
         this.totalRating = place.getTotalRating();
-        this.wantToVisit = 0;
+        this.wantToVisit = place.getWantToVisit();
         this.distance = distance(place.getLatitude(), place.getLongitude(), latitude, longitude, "meter");
     }
 
