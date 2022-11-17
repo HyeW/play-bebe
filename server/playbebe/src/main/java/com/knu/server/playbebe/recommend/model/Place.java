@@ -4,10 +4,13 @@ import com.knu.server.playbebe.review.model.Review;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.List;
 
+@DynamicInsert
 @Getter
 @Setter
 @NoArgsConstructor
@@ -38,15 +41,30 @@ public class Place {
     private String establishmentName;
 
     @Column
-    private double latitude;
+    private Double coordinateX;
 
     @Column
-    private double longitude;
+    private Double coordinateY;
 
     @Column
+    private Double latitude;
+
+    @Column
+    private Double longitude;
+
+    @Column
+    @ColumnDefault("0")
     private Double totalRating;
 
-    @OneToMany(mappedBy="place")
+    @OneToMany(mappedBy="place", cascade = CascadeType.ALL)
     private List<Review> messages;
 
+    //총 별점 계산하기
+    public void setTotalRating(Double rating){
+        if(this.totalRating == null) {
+            this.totalRating = Double.valueOf(0);
+        }
+
+        this.totalRating = ((this.totalRating * messages.size()) + rating)/(messages.size()+1);
+    }
 }

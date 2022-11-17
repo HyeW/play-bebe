@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://dbinstance.csaqw2bfsjnj.ap-northeast-2.rds.amazonaws.com:3306/playbebe
+    username: admin
+    password: dbinstance
+
+  jpa:
+    hibernate:
+      ddl-auto: update #create update none
+    show-sql: true
+    generate-ddl: true
+    defer-datasource-initialization: true
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+file:
+  path: C:\KnuImages\
