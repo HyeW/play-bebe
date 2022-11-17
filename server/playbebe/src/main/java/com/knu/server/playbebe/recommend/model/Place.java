@@ -38,19 +38,19 @@ public class Place {
     private String establishmentName;
 
     @Column
-    private double coordinateX;
+    private Double coordinateX;
 
     @Column
-    private double coordinateY;
+    private Double coordinateY;
 
     @Column
-    private double latitude;
+    private Double latitude;
 
     @Column
-    private double longitude;
+    private Double longitude;
 
     @Column
-    private double totalRating;
+    private Double totalRating;
 
     @OneToMany(mappedBy="place")
     private List<Review> messages;

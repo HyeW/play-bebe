@@ -5,10 +5,6 @@ import com.knu.server.playbebe.recommend.model.Place;
 import com.knu.server.playbebe.recommend.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.locationtech.proj4j.BasicCoordinateTransform;
-import org.locationtech.proj4j.CRSFactory;
-import org.locationtech.proj4j.CoordinateReferenceSystem;
-import org.locationtech.proj4j.ProjCoordinate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,9 +30,13 @@ public class PlaceService {
                 .collect(Collectors.toList());
     }
 
-    public List<PlaceSimpleInfoDto> orderByDistance(int page) {
+    public List<PlaceSimpleInfoDto> orderByDistance(int page, double latitude, double longitude) {
+        List<Place> places = placeRepository.findAll();
+        List<PlaceSimpleInfoDto> simpleInfoDtos = places.stream()
+                .map(place -> new PlaceSimpleInfoDto(place, latitude, longitude))
+                .sorted()
+                .collect(Collectors.toList());
 
-
-        return null;
+        return simpleInfoDtos.subList(page * 6, (page + 1) * 6);
     }
 }
