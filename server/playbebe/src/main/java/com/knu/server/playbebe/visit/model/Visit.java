@@ -27,4 +27,12 @@ public class Visit extends TimeStamped {
     @JoinColumn
     private User user;
 
+    // 연관관계 편의 메서드
+    public void setPlace(Place place) {
+        if (this.place != null) {
+            this.place.removeVisit(this);
+        }
+        this.place = place;
+        place.addVisit(this);
+    }
 }

@@ -25,4 +25,9 @@ public class PlaceController {
     public List<PlaceSimpleInfoDto> listOfPlacesOrderByDistance(@PathVariable int page, @PathVariable double latitude, @PathVariable double longitude) {
         return placeService.orderByDistance(page, latitude, longitude);
     }
+
+    @GetMapping("/{latitude}/{longitude}")
+    public List<PlaceSimpleInfoDto> listOfTodayHotPlaces(@PathVariable double latitude, @PathVariable double longitude) {
+        return placeService.todayHotPlaces(latitude, longitude);
+    }
 }
