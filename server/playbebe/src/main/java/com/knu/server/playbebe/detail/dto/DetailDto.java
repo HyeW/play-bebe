@@ -16,7 +16,7 @@ public class DetailDto {
     private WeatherDto weather;
     private String review_content;
     private MultipartFile review_picture;
-    private String distance;
+    private double distance;
 
 
     public void setPlaceInfo(String placeName, String placeAddress, String placeTelephone){
@@ -38,7 +38,7 @@ public class DetailDto {
         this.review_picture = review_picture;
     }
 
-    public void setDistance(String distance){
+    public void setDistance(double distance){
         this.distance = distance;
     }
 }

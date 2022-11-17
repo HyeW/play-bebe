@@ -18,14 +18,14 @@ public class DetailController {
     private final DetailService detailService;
 
     // 이름, 주소, 전화번호, 방문해요 수, 날씨, 리뷰 1개, 사진, 거리
-    @GetMapping("/detail/{place}")
-    public DetailDto getDetail(@PathVariable long place) throws JSONException, IOException {
+    @GetMapping("/detail/{place}/{latitude}/{longitude}")
+    public DetailDto getDetail(@PathVariable long place, @PathVariable double latitude, @PathVariable double longitude) throws JSONException, IOException {
         DetailDto detailDto = new DetailDto();
         detailDto = detailService.getPlaceInfo(place); // 이름,주소,전화번호
         detailDto = detailService.getVisitInfo(detailDto, place); // 방문 정보
         detailDto = detailService.getWeatherInfo(detailDto, place); //날씨 정보
         detailDto = detailService.getReview(detailDto, place); // 리뷰1개, 사진
-        detailDto = detailService.getDistance(detailDto);
+        detailDto = detailService.getDistance(detailDto,place,latitude,longitude);
         return detailDto;
     }
 

@@ -10,14 +10,13 @@ import com.knu.server.playbebe.weather.dto.CoordinateDto;
 import com.knu.server.playbebe.weather.dto.DateTimeDto;
 import com.knu.server.playbebe.weather.dto.RegionNameDto;
 import com.knu.server.playbebe.weather.dto.WeatherDto;
-import com.knu.server.playbebe.weather.model.location;
+import com.knu.server.playbebe.weather.model.Location;
 import com.knu.server.playbebe.weather.respository.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,6 +26,7 @@ import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -71,21 +71,41 @@ public class DetailService {
         return detailDto;
     }
 
-    public DetailDto getDistance(DetailDto detailDto){
-        // 현재 위치의 좌표 구하기
+    public DetailDto getDistance(DetailDto detailDto, long place, double from_latitude, double from_longitude){
+        Place place_ = placeRepository.findById(place).get();
+        double to_latitude = place_.getLatitude();
+        double to_longtitude = place_.getLongitude();
 
-        // 해당 장소의 좌표 구하기
-        return null;
+        double theta = from_longitude-to_longtitude;
+        double dist = Math.sin(deg2rad(from_latitude)) * Math.sin(deg2rad(to_latitude)) + Math.cos(deg2rad(from_latitude))+ Math.cos(deg2rad(theta));
+
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist*60 * 1.1515;
+
+        // meter로 표기
+        dist = dist * 1609.344;
+        detailDto.setDistance(dist);
+        return detailDto;
     }
 
+    // This function converts decimal degrees to radians
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
 
+    // This function converts radians to decimal degrees
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
 
     // 날씨 관련 함수들
     public RegionNameDto getRegionName(long id){
         String placeAddrss = placeRepository.findById(id).get().getAddress();
-        String siName = "";
-        String guName = "";
-        return new RegionNameDto(siName,guName);
+        String splitAddr[] = placeAddrss.split(" ");
+        String phase1 = splitAddr[0];
+        String phase2 = splitAddr[1];
+        return new RegionNameDto(phase1,phase2);
     }
 
     public DateTimeDto getCurDateTime(){ // 현재 시간 정보
@@ -117,9 +137,10 @@ public class DetailService {
     }
 
     public CoordinateDto getCurX_Y(RegionNameDto regionNameDto){
-        Optional<location> location = locationRepository.findById((long)0);
-        String X = location.get().getX();
-        String Y = location.get().getY();
+        // phase1, phase2에 따른 X,Y좌표 가져오기
+        List<Location> location = locationRepository.findAllByPhase1AndPhase2(regionNameDto.getPhase1(),regionNameDto.getPhase2());
+        String X = location.get(0).getX();
+        String Y = location.get(0).getY();
         return new CoordinateDto(X,Y);
     }
 
@@ -157,7 +178,6 @@ public class DetailService {
 
     // JSON 데이터 파싱하기
     public static WeatherDto getWeather(String JSONdata) throws JSONException {
-
         JSONObject jObject = new JSONObject(JSONdata);
         JSONObject response = jObject.getJSONObject("response");
         JSONObject body = response.getJSONObject("body");
@@ -165,26 +185,10 @@ public class DetailService {
         JSONArray item = items.getJSONArray("item");
 
         String SKY = new JSONObject(item.get(5).toString()).getString("fcstValue");
-        String Degree = new JSONObject(item.get(0).toString()).getString("fcstValue")+"°"; // 1시간 기온 TMP
-        String RainyProb = new JSONObject(item.get(7).toString()).getString("fcstValue")+"%"; // 강수 확률 POP
+        String Degree = new JSONObject(item.get(0).toString()).getString("fcstValue"); // 1시간 기온 TMP
+        String RainyProb = new JSONObject(item.get(7).toString()).getString("fcstValue"); // 강수 확률 POP
         String RainyType = new JSONObject(item.get(6).toString()).getString("fcstValue"); // 강수 형태 PTY
         String WindSpeed = new JSONObject(item.get(4).toString()).getString("fcstValue"); // 풍속 WSD
-
-        if(SKY.equals("1")) SKY = "맑음";
-        else if(SKY.equals("3")) SKY = "구름 많음";
-        else SKY = "흐림";
-
-        if(RainyType.equals("0")) RainyType="없음";
-        else if(RainyType.equals("1")) RainyType="비";
-        else if(RainyType.equals("2")) RainyType="비/눈";
-        else if(RainyType.equals("3")) RainyType="눈";
-        else RainyType="소나기";
-        double windSpeed = Double.parseDouble(WindSpeed);
-        if(windSpeed<4.0) WindSpeed ="바람이 약하다(연기 흐름에 따라 풍향감지 가능)";
-        else if(windSpeed>=4.0 && windSpeed<9.0) WindSpeed ="바람이 약간 강하다(안민에 감촉을 느끼면서 나뭇잎이 조금 흔들림)";
-        else if(windSpeed>=9.0 && windSpeed<14) WindSpeed="바람이 강하다(나무 가지와 깃발이 가볍게 흔들림)";
-        else WindSpeed="바람이 매우 강하다(먼지가 일고, 작은 나무 전체가 흔들림)";
-
         return new WeatherDto(SKY,Degree,RainyProb,RainyType,WindSpeed);
     }
 }

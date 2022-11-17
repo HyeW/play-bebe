@@ -1,6 +1,7 @@
 package com.knu.server.playbebe.visit.model;
 
 
+import com.knu.server.playbebe.auth.model.User;
 import com.knu.server.playbebe.recommend.model.Place;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +23,8 @@ public class Visit extends TimeStamped {
     @JoinColumn
     private Place place;
 
-//    @ManyToOne
-//    @JoinColumn
-//    private User user;
+    @ManyToOne
+    @JoinColumn
+    private User user;
 
 }
