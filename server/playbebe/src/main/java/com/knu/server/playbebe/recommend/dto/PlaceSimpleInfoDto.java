@@ -14,7 +14,7 @@ public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
 
     private String name;
     private String simpleAddress;
-    private double totalRating;
+    private Double totalRating;
     private int wantToVisit;
     private double distance;
 

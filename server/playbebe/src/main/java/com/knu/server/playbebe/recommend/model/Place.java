@@ -4,10 +4,13 @@ import com.knu.server.playbebe.review.model.Review;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.List;
 
+@DynamicInsert
 @Getter
 @Setter
 @NoArgsConstructor
@@ -50,6 +53,7 @@ public class Place {
     private Double longitude;
 
     @Column
+    @ColumnDefault("0")
     private Double totalRating;
 
     @OneToMany(mappedBy="place", cascade = CascadeType.ALL)
