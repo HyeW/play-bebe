@@ -5,11 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class DetailController {
     private final DetailService detailService;
     // 이름, 주소, 전화번호, 방문해요 수, 날씨, 리뷰 1개, 사진, 거리

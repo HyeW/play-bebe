@@ -34,7 +34,7 @@ public class Visit extends TimeStamped {
         this.user = visitDto.getUser();
     }
 
-    // ¿¬°ü°ü°è ÆíÀÇ ¸Ş¼­µå
+    // ì—°ê´€ê´€ê³„ í¸ì˜ ë©”ì„œë“œ
     public void setPlace(Place place) {
         if (this.place != null) {
             this.place.removeVisit(this);
