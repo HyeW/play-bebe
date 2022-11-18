@@ -21,6 +21,9 @@ import UmbrellaIcon from '@mui/icons-material/Umbrella';
 import AirIcon from '@mui/icons-material/Air';
 import {pink, grey} from "@mui/material/colors";
 import {PlaceDialogAction} from "./PlaceDialogReducer";
+import CreateIcon from "@mui/icons-material/Create";
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import {useNavigate} from "react-router-dom";
 
 interface PlaceDialogProps {
   handleClose: () => void,
@@ -34,6 +37,16 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
   const visitCount = useSelector((state: RootState) => state.PlaceDialogReducer.visitCount);
   const distance = useSelector((state: RootState) => state.PlaceDialogReducer.distance);
 
+  const navigate = useNavigate();
+
+  const handleClickGoToWriteReviewButton = () => {
+    navigate('/write-review');
+  };
+
+  const handleClickGoToSeeReviewButton = () => {
+    navigate('/users-review');
+  };
+
   return (
     <Dialog
       open={openPlaceDialog}
@@ -45,7 +58,14 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
         <DialogContentText mt={3}>
           {'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'}
         </DialogContentText>
-
+        <Grid container mt={3} spacing={2}>
+          <Grid item xs>
+            <GoToWriteReviewButton handleClickGoToWriteReviewButton={handleClickGoToWriteReviewButton}/>
+          </Grid>
+          <Grid item xs>
+            <GoToSeeReviewButton handleClickGoToSeeReviewButton={handleClickGoToSeeReviewButton}/>
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>{'닫기'}</Button>
@@ -53,6 +73,28 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
     </Dialog>
   );
 };
+
+const GoToWriteReviewButton = (props: { handleClickGoToWriteReviewButton: () => void }) => {
+  return (
+    <Box sx={{display: 'flex', justifyContent: 'right'}}>
+      <Button variant="outlined" size="large"
+              sx={{borderRadius: 10, px: 5}}
+              startIcon={<CreateIcon/>}
+              onClick={props.handleClickGoToWriteReviewButton}>{'리뷰 쓰기'}</Button>
+    </Box>
+  );
+}
+
+const GoToSeeReviewButton = (props: { handleClickGoToSeeReviewButton: () => void }) => {
+  return (
+    <Box sx={{display: 'flex', justifyContent: 'left'}}>
+      <Button variant="outlined" size="large"
+              sx={{borderRadius: 10, px: 5}}
+              startIcon={<ZoomInIcon/>}
+              onClick={props.handleClickGoToSeeReviewButton}>{'리뷰 더보기'}</Button>
+    </Box>
+  );
+}
 
 const WEATHER_ICON_TYPE = {
   SUNNY: 0,
@@ -68,7 +110,7 @@ function WeatherInfo() {
   const weather = useSelector((state: RootState) => state.PlaceDialogReducer.weather);
   const weatherIcon = useSelector((state: RootState) => state.PlaceDialogReducer.weatherIcon);
 
-  useEffect(()=> {
+  useEffect(() => {
     decideWeatherType("3", "0");
   }, []);
 
@@ -107,17 +149,17 @@ function WeatherInfo() {
 
 function WeatherCard(props: { mainText: string, subText: string, iconType: number }) {
   const renderIcon = (iconType: number) => {
-    if(iconType === WEATHER_ICON_TYPE.SUNNY) {
+    if (iconType === WEATHER_ICON_TYPE.SUNNY) {
       return <WbSunnyIcon sx={{color: pink[500], fontSize: 45}}/>
-    } else if(iconType === WEATHER_ICON_TYPE.CLOUDY) {
+    } else if (iconType === WEATHER_ICON_TYPE.CLOUDY) {
       return <CloudIcon sx={{color: pink[500], fontSize: 45}}/>
-    } else if(iconType === WEATHER_ICON_TYPE.RAINY) {
+    } else if (iconType === WEATHER_ICON_TYPE.RAINY) {
       return <UmbrellaIcon sx={{color: pink[500], fontSize: 45}}/>
-    } else if(iconType === WEATHER_ICON_TYPE.SNOWY) {
+    } else if (iconType === WEATHER_ICON_TYPE.SNOWY) {
       return <AcUnitIcon sx={{color: pink[500], fontSize: 45}}/>
-    } else if(iconType === WEATHER_ICON_TYPE.WATER_DROP) {
+    } else if (iconType === WEATHER_ICON_TYPE.WATER_DROP) {
       return <OpacityIcon sx={{color: pink[500], fontSize: 45}}/>
-    } else if(iconType === WEATHER_ICON_TYPE.WIND) {
+    } else if (iconType === WEATHER_ICON_TYPE.WIND) {
       return <AirIcon sx={{color: pink[500], fontSize: 45}}/>
     }
   };
