@@ -3,8 +3,8 @@ package com.knu.server.playbebe.visit.model;
 
 import com.knu.server.playbebe.auth.model.User;
 import com.knu.server.playbebe.recommend.model.Place;
+import com.knu.server.playbebe.review.model.TimeStamped;
 import com.knu.server.playbebe.visit.dto.VisitDto;
-import com.knu.server.playbebe.visit.dto.VisitRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
