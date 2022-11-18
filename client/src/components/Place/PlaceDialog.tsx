@@ -6,7 +6,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  Grid,
+  Grid, ToggleButton,
   Typography
 } from "@mui/material";
 import React, {useEffect} from "react";
@@ -23,6 +23,7 @@ import {pink, grey} from "@mui/material/colors";
 import {PlaceDialogAction} from "./PlaceDialogReducer";
 import CreateIcon from "@mui/icons-material/Create";
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import {useNavigate} from "react-router-dom";
 
 interface PlaceDialogProps {
@@ -36,7 +37,9 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
   const rating = useSelector((state: RootState) => state.PlaceDialogReducer.rating);
   const visitCount = useSelector((state: RootState) => state.PlaceDialogReducer.visitCount);
   const distance = useSelector((state: RootState) => state.PlaceDialogReducer.distance);
+  const visitSelected = useSelector((state: RootState) => state.PlaceDialogReducer.visitSelected);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleClickGoToWriteReviewButton = () => {
@@ -45,6 +48,10 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
 
   const handleClickGoToSeeReviewButton = () => {
     navigate('/users-review');
+  };
+
+  const handleClickVisitToggleButton = () => {
+    dispatch(PlaceDialogAction.setVisitSelected(!visitSelected));
   };
 
   return (
@@ -58,12 +65,16 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
         <DialogContentText mt={3}>
           {'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'}
         </DialogContentText>
-        <Grid container mt={3} spacing={2}>
+        <Grid container mt={3} spacing={1}>
           <Grid item xs>
             <GoToWriteReviewButton handleClickGoToWriteReviewButton={handleClickGoToWriteReviewButton}/>
           </Grid>
           <Grid item xs>
             <GoToSeeReviewButton handleClickGoToSeeReviewButton={handleClickGoToSeeReviewButton}/>
+          </Grid>
+          <Grid item xs>
+            <VisitToggleButton visitSelected={visitSelected}
+                               handleClickVisitToggleButton={handleClickVisitToggleButton}/>
           </Grid>
         </Grid>
       </DialogContent>
@@ -78,7 +89,7 @@ const GoToWriteReviewButton = (props: { handleClickGoToWriteReviewButton: () => 
   return (
     <Box sx={{display: 'flex', justifyContent: 'right'}}>
       <Button variant="outlined" size="large"
-              sx={{borderRadius: 10, px: 5}}
+              sx={{borderRadius: 10}}
               startIcon={<CreateIcon/>}
               onClick={props.handleClickGoToWriteReviewButton}>{'리뷰 쓰기'}</Button>
     </Box>
@@ -87,14 +98,30 @@ const GoToWriteReviewButton = (props: { handleClickGoToWriteReviewButton: () => 
 
 const GoToSeeReviewButton = (props: { handleClickGoToSeeReviewButton: () => void }) => {
   return (
-    <Box sx={{display: 'flex', justifyContent: 'left'}}>
+    <Box sx={{display: 'flex', justifyContent: 'center'}}>
       <Button variant="outlined" size="large"
-              sx={{borderRadius: 10, px: 5}}
+              sx={{borderRadius: 10}}
               startIcon={<ZoomInIcon/>}
               onClick={props.handleClickGoToSeeReviewButton}>{'리뷰 더보기'}</Button>
     </Box>
   );
 }
+
+const VisitToggleButton = (props: { visitSelected: boolean, handleClickVisitToggleButton: () => void }) => {
+  return (
+    <Box sx={{display: 'flex', justifyContent: 'left'}}>
+      <ToggleButton
+        value="check"
+        sx={{borderRadius: 9, py: 1, px: 3}}
+        selected={props.visitSelected}
+        onChange={props.handleClickVisitToggleButton}
+        color="warning"
+      >
+        <ThumbUpAltIcon/>&nbsp;&nbsp;{'방문해요'}
+      </ToggleButton>
+    </Box>
+  );
+};
 
 const WEATHER_ICON_TYPE = {
   SUNNY: 0,
