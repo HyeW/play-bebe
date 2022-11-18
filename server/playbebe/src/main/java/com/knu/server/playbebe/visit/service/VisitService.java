@@ -23,7 +23,7 @@ public class VisitService {
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
 
-    public boolean visitRegister(VisitRequestDto visitRequestDto) {
+    public boolean saveVisit(VisitRequestDto visitRequestDto) {
         Optional<Place> curPlace = placeRepository.findById(visitRequestDto.getPlaceId());
         Optional<User> curUser = userRepository.findById(visitRequestDto.getUserId());
         if (curPlace.isEmpty() || curUser.isEmpty()) return false;
@@ -32,6 +32,16 @@ public class VisitService {
         Visit visit = new Visit(visitDto);
         visitRepository.save(visit);
 
+        return true;
+    }
+
+    public boolean deleteVisit(VisitRequestDto visitRequestDto) {
+        boolean existPlace = placeRepository.existsById(visitRequestDto.getPlaceId());
+        boolean existUser = userRepository.existsById(visitRequestDto.getUserId());
+        if (!existPlace || !existUser) return false;
+
+        Visit curVisit = visitRepository.findByUserIdAndPlace_Id(visitRequestDto.getUserId(), visitRequestDto.getPlaceId());
+        visitRepository.delete(curVisit);
         return true;
     }
 }

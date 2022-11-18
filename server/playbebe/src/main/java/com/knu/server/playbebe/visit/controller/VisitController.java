@@ -4,10 +4,7 @@ import com.knu.server.playbebe.visit.dto.VisitRequestDto;
 import com.knu.server.playbebe.visit.service.VisitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -19,6 +16,11 @@ public class VisitController {
 
     @PostMapping
     public boolean wantToVisit(@RequestBody VisitRequestDto visitRequestDto) {
-        return visitService.visitRegister(visitRequestDto);
+        return visitService.saveVisit(visitRequestDto);
+    }
+
+    @DeleteMapping
+    public boolean notWantToVisit(@RequestBody VisitRequestDto visitRequestDto) {
+        return visitService.deleteVisit(visitRequestDto);
     }
 }
