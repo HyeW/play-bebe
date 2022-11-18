@@ -68,33 +68,52 @@ public class ReviewBasicService {
         ReviewListResDTO result = new ReviewListResDTO();
 
         for(Review r : reviewList){
-            ReviewImageDTO image = null;
-
-            if(r.getImage() != null) {
-                FileSystemResource resource = fileService.findFile(r.getImage().getStorePath());
-                if (!resource.exists()) {
-                    throw new FileNotFoundException();
-                }
-                InputStream imageStream = new FileInputStream(r.getImage().getStorePath());
-                byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-                imageByteArray = Base64.encodeBase64(imageByteArray);
-                imageStream.close();
-                System.out.println(r.getImage().getExtension());
-                image = ReviewImageDTO.builder()
-                        .imageFile(imageByteArray)
-                        .imageExtension(r.getImage().getExtension())
-                        .build();
-            }
-            ReviewBasicResDTO basicResDTO =
-                    new ReviewBasicResDTO(r.getContent(), r.getRating(), r.getVisitDate(), r.getCreatedAt(),
-                            r.getUser().getNickname(), r.getPlace().getId(),
-                            r.getPlace().getEstablishmentName(), r.getPlace().getAddress(),
-                            image);
+            ReviewBasicResDTO basicResDTO = createReviewBasicResDTO(r);
 
             result.getLatestReview().add(basicResDTO);
         }
 
         return result;
+    }
+
+    public ReviewListResDTO getPlaceReview(Long id) throws IOException {
+        Optional<Place> place = placeRepository.findById(id);
+        List<Review> reviews = place.get().getMessages();
+        ReviewListResDTO result = new ReviewListResDTO();
+
+        for(int i = reviews.size() - 1; i >= 0; i--){
+            Review r = reviews.get(i);
+            ReviewBasicResDTO basicResDTO = createReviewBasicResDTO(r);
+
+            result.getLatestReview().add(basicResDTO);
+        }
+
+        return result;
+    }
+
+    public ReviewBasicResDTO createReviewBasicResDTO(Review r) throws IOException {
+        ReviewImageDTO image = null;
+
+        if(r.getImage() != null) {
+            FileSystemResource resource = fileService.findFile(r.getImage().getStorePath());
+            if (!resource.exists()) {
+                throw new FileNotFoundException();
+            }
+            InputStream imageStream = new FileInputStream(r.getImage().getStorePath());
+            byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+            imageByteArray = Base64.encodeBase64(imageByteArray);
+            imageStream.close();
+            System.out.println(r.getImage().getExtension());
+            image = ReviewImageDTO.builder()
+                    .imageFile(imageByteArray)
+                    .imageExtension(r.getImage().getExtension())
+                    .build();
+        }
+        return new ReviewBasicResDTO(r.getContent(), r.getRating(), r.getVisitDate(), r.getCreatedAt(),
+                        r.getUser().getNickname(), r.getPlace().getId(),
+                        r.getPlace().getEstablishmentName(), r.getPlace().getAddress(),
+                        image);
+
     }
 
     public Review getReviewImage(Long id) {
