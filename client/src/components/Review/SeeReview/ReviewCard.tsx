@@ -1,12 +1,14 @@
 import {Box, Grid, Rating, Skeleton, Stack, Typography} from "@mui/material";
 import React from "react";
 
-export interface ReviewCardProps extends ReviewTitleProps, ReviewContentProps, ReviewInfoProps {}
+export interface ReviewCardProps extends ReviewTitleProps, ReviewContentProps, ReviewInfoProps {
+  isOnePlace?: boolean,
+}
 
-export default function ReviewCard({placeName, address, content, visitDate, createDate, nickname, rating, index}: ReviewCardProps) {
+export default function ReviewCard({placeName, address, content, visitDate, createDate, nickname, rating, index, isOnePlace}: ReviewCardProps) {
   return (
     <Box my={5}>
-      <ReviewTitle placeName={placeName} address={address}/>
+      {!isOnePlace && <ReviewTitle placeName={placeName} address={address}/>}
       <Grid container spacing={3}>
         {index !== undefined && index%2 === 0 &&
             <Grid item xs>
@@ -30,7 +32,7 @@ interface ReviewTitleProps {
   address: string,
 }
 
-const ReviewTitle = ({placeName, address}: ReviewTitleProps) => {
+export const ReviewTitle = ({placeName, address}: ReviewTitleProps) => {
   return (
     <Box mb={1}>
       <Typography

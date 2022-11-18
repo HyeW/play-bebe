@@ -47,7 +47,7 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
   };
 
   const handleClickGoToSeeReviewButton = () => {
-    navigate('/users-review');
+    navigate('/users-review-per-place');
   };
 
   const handleClickVisitToggleButton = () => {

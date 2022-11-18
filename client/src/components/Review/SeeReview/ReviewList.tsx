@@ -5,7 +5,7 @@ import {SeeReviewAction} from "./SeeReviewReducer";
 import {RootState} from "../../../store";
 import {useEffect} from "react";
 
-export default function ReviewList() {
+export default function ReviewList(props: {isOnePlace: boolean}) {
   const dispatch = useDispatch();
   const reviewData = useSelector((state: RootState) => state.SeeReviewReducer.reviewData);
   const seeMoreCount = useSelector((state: RootState) => state.SeeReviewReducer.seeMoreCount);
@@ -23,7 +23,8 @@ export default function ReviewList() {
     <div>
       {reviewData.map((data, index) =>
         <ReviewCard placeName={data.placeName} address={data.address} content={data.content} visitDate={data.visitDate}
-                    createDate={data.createDate} nickname={data.nickname} rating={data.rating} index={index}/>
+                    createDate={data.createDate} nickname={data.nickname} rating={data.rating} index={index}
+                    isOnePlace={props.isOnePlace}/>
       )}
       <SeeMoreButton handleClickSeeMoreButton={handleClickSeeMoreButton}/>
     </div>
