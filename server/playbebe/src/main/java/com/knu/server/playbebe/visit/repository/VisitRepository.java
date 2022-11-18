@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface VisitRepository extends JpaRepository<Visit,Long> {
     List<Visit> findAllByPlace_Id(Long placeId);
+    boolean existsVisitByUser_IdAndPlace_Id(long userId, long placeId);
 }

@@ -17,6 +17,8 @@ public class DetailDto {
     private String review_content;
     private MultipartFile review_picture;
     private double distance;
+    private double rating;
+    private boolean isVisit;
 
 
     public void setPlaceInfo(String placeName, String placeAddress, String placeTelephone){
@@ -25,8 +27,9 @@ public class DetailDto {
         this.placeTelephone = placeTelephone;
     }
 
-    public void setVisitInfo(int visitNum){
+    public void setVisitInfo(int visitNum, boolean isVisit){
         this.visitNum = visitNum;
+        this.isVisit = isVisit;
     }
 
     public void setWeather(WeatherDto weatherdto){
@@ -37,8 +40,10 @@ public class DetailDto {
         this.review_content = review_content;
         this.review_picture = review_picture;
     }
-
     public void setDistance(double distance){
         this.distance = distance;
+    }
+    public void setRating(double rating){
+        this.rating = rating;
     }
 }
