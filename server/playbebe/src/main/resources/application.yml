@@ -26,4 +26,5 @@ spring:
       fail-on-empty-beans: false
 
 file:
-  path: C:\KnuImages\
+  #path: C:/KnuImages/
+  path: /home/ec2-user/secondTest(FilePath)/KnuImages/
