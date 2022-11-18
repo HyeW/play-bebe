@@ -23,7 +23,6 @@ public class FileService {
     public String extractExt(String originalFilename){
         int idx = originalFilename.lastIndexOf(".");
         String ext = originalFilename.substring(idx);
-        System.out.println("Ext: "+ext);
 
         return ext;
     }
@@ -47,6 +46,7 @@ public class FileService {
         return Image.builder()
                 .storePath(storePath)
                 .originalFilename(multipartFile.getOriginalFilename())
+                .extension(extractExt(multipartFile.getOriginalFilename()))
                 .build();
     }
 

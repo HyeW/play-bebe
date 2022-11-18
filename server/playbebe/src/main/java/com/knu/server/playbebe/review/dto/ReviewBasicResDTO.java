@@ -18,10 +18,12 @@ public class ReviewBasicResDTO {
     private Long placeId;           //유원지 pk
     private String establishmentName;       //유원지 이름
     private String address;                 //유원지 주소
+    private ReviewImageDTO image;
 
     @Builder
     public ReviewBasicResDTO(String content, Double rating, LocalDate visitDate,
-                             LocalDateTime createDate, String nickname, Long placeId, String placeName, String address) {
+                             LocalDateTime createDate, String nickname, Long placeId, String placeName, String address,
+                             ReviewImageDTO image) {
         this.content = content;
         this.rating = rating;
         this.visitDate = visitDate;
@@ -30,5 +32,6 @@ public class ReviewBasicResDTO {
         this.placeId = placeId;
         this.establishmentName = placeName;
         this.address = address;
+        this.image = image;
     }
 }
