@@ -16,7 +16,7 @@ export default function SeeReview() {
     <Container maxWidth="lg">
       <GoToWriteReviewButton handleClickGoToWriteReviewButton={handleClickGoToWriteReviewButton}/>
       <Alert severity="info">{'다른 플베 회원님들은 최근에 이런 곳을 다녀왔대요!'}</Alert>
-      <ReviewList/>
+      <ReviewList isOnePlace={false}/>
     </Container>
   )
 }
@@ -24,7 +24,7 @@ export default function SeeReview() {
 interface GoToWriteReviewButtonProps {
   handleClickGoToWriteReviewButton: ()=>void,
 }
-const GoToWriteReviewButton = ({handleClickGoToWriteReviewButton}: GoToWriteReviewButtonProps) => {
+export const GoToWriteReviewButton = ({handleClickGoToWriteReviewButton}: GoToWriteReviewButtonProps) => {
   return (
     <Box sx={{display: 'flex', justifyContent: 'center'}} my={5}>
       <Button variant="outlined" size="large"

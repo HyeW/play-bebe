@@ -7,6 +7,9 @@ const TYPE = {
   SET_RATING: `${HEADER}/SET_RATING` as const,
   SET_VISIT_COUNT: `${HEADER}/SET_VISIT_COUNT` as const,
   SET_DISTANCE: `${HEADER}/SET_DISTANCE` as const,
+  SET_WEATHER_ICON: `${HEADER}/SET_WEATHER_ICON` as const,
+  SET_WEATHER: `${HEADER}/SET_WEATHER` as const,
+  SET_VISIT_SELECTED: `${HEADER}/SET_VISIT_SELECTED` as const,
 };
 
 export const PlaceDialogAction = {
@@ -16,6 +19,9 @@ export const PlaceDialogAction = {
   setRating: (rating: number) => ({type: TYPE.SET_RATING, payload: rating}),
   setVisitCount: (visitCount: number) => ({type: TYPE.SET_VISIT_COUNT, payload: visitCount}),
   setDistance: (distance: string) => ({type: TYPE.SET_DISTANCE, payload: distance}),
+  setWeatherIcon: (weatherIcon: number) => ({type: TYPE.SET_WEATHER_ICON, payload: weatherIcon}),
+  setWeather: (weather: string) => ({type: TYPE.SET_WEATHER, payload: weather}),
+  setVisitSelected: (selected: boolean) => ({type: TYPE.SET_VISIT_SELECTED, payload: selected}),
 };
 
 type PlaceDialogActionType =
@@ -24,7 +30,10 @@ type PlaceDialogActionType =
   ReturnType<typeof PlaceDialogAction.setAddress> |
   ReturnType<typeof PlaceDialogAction.setRating> |
   ReturnType<typeof PlaceDialogAction.setVisitCount> |
-  ReturnType<typeof PlaceDialogAction.setDistance>;
+  ReturnType<typeof PlaceDialogAction.setDistance> |
+  ReturnType<typeof PlaceDialogAction.setWeatherIcon> |
+  ReturnType<typeof PlaceDialogAction.setWeather> |
+  ReturnType<typeof PlaceDialogAction.setVisitSelected>;
 
 
 // state
@@ -35,6 +44,9 @@ type PlaceDialogState = {
   rating: number,
   visitCount: number,
   distance: string,
+  weatherIcon: number,
+  weather: string,
+  visitSelected: boolean,
 }
 
 const INIT_PLACE_DIALOG_STATE: PlaceDialogState = {
@@ -44,6 +56,9 @@ const INIT_PLACE_DIALOG_STATE: PlaceDialogState = {
   rating: 0,
   visitCount: 0,
   distance: '',
+  weatherIcon: 0,
+  weather: '',
+  visitSelected: false,
 };
 
 
@@ -62,6 +77,12 @@ export default function PlaceDialogReducer(state: PlaceDialogState = INIT_PLACE_
       return {...state, visitCount: action.payload};
     case TYPE.SET_DISTANCE:
       return {...state, distance: action.payload};
+    case TYPE.SET_WEATHER_ICON:
+      return {...state, weatherIcon: action.payload};
+    case TYPE.SET_WEATHER:
+      return {...state, weather: action.payload};
+    case TYPE.SET_VISIT_SELECTED:
+      return {...state, visitSelected: action.payload};
     default:
       return state;
   }
