@@ -1,5 +1,10 @@
 package com.knu.server.playbebe.recommend;
 
+import org.locationtech.proj4j.BasicCoordinateTransform;
+import org.locationtech.proj4j.CRSFactory;
+import org.locationtech.proj4j.CoordinateReferenceSystem;
+import org.locationtech.proj4j.ProjCoordinate;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,10 +47,10 @@ public class getPlace {
         String path = curPath + "/src/main/resources/static/fulldata_03_07_09_P.csv";
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path),"euc-kr"));
         String line = null;
-        br.readLine(); // √ππ¯¬∞ ¡Ÿ ª˝∑´
+        br.readLine(); // Ï≤´Î≤àÏß∏ Ï§Ñ ÏÉùÎûµ
 
         try{
-            String query = "insert into Place(curStatus,telephone,postalCode,address,roadNameAddress,establishmentName,latitude,longitude) values (?,?,?,?,?,?,?,?)";
+            String query = "insert into place(cur_status,telephone,postal_code,address,road_name_address,establishment_name,coordinatex,coordinatey,latitude,longitude) values (?,?,?,?,?,?,?,?,?,?)";
             pstmt = conn.prepareStatement(query);
 
             while((line = br.readLine())!=null){
@@ -56,10 +61,12 @@ public class getPlace {
                 String address = temp[18];
                 String roadNameAddress = temp[19];
                 String establishmentName = temp[21];
-                double latitude = 0;
-                double longitude = 0;
-                if (!temp[26].equals("")) latitude = Double.parseDouble(temp[26]);
-                if (!temp[27].equals("")) longitude = Double.parseDouble(temp[27]);
+                double coordinateX = 0;
+                double coordinateY = 0;
+                if (!temp[26].equals("")) coordinateX = Double.parseDouble(temp[26]);
+                if (!temp[27].equals("")) coordinateY = Double.parseDouble(temp[27]);
+
+                double[] projection = projection(coordinateX, coordinateY);
 
                 pstmt.setString(1,curStatus);
                 pstmt.setString(2,telephone);
@@ -67,14 +74,30 @@ public class getPlace {
                 pstmt.setString(4,address);
                 pstmt.setString(5,roadNameAddress);
                 pstmt.setString(6,establishmentName);
-                pstmt.setDouble(7,latitude);
-                pstmt.setDouble(8,longitude);
+                pstmt.setDouble(7,coordinateX);
+                pstmt.setDouble(8,coordinateY);
+                pstmt.setDouble(9,projection[0]);
+                pstmt.setDouble(10,projection[1]);
                 pstmt.executeUpdate();
-                System.out.println("insert º∫∞¯!");
+                System.out.println("insert ÏÑ±Í≥µ!");
             }
         } catch(SQLException ee){
             System.err.println("error = " + ee.toString());
         }
+    }
+
+    public static double[] projection(double x, double y) {
+        CRSFactory factory = new CRSFactory();
+        CoordinateReferenceSystem srcCrs = factory.createFromName("EPSG:2097");
+        CoordinateReferenceSystem dstCrs = factory.createFromName("EPSG:4326");
+
+        BasicCoordinateTransform transform = new BasicCoordinateTransform(srcCrs, dstCrs);
+
+        ProjCoordinate srcCoord = new ProjCoordinate(x, y);
+        ProjCoordinate dstCoord = new ProjCoordinate();
+
+        transform.transform(srcCoord, dstCoord);
+        return new double[]{dstCoord.x, dstCoord.y};
     }
 
 }
