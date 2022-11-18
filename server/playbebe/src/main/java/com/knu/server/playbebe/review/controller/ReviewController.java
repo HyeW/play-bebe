@@ -4,6 +4,7 @@ import com.knu.server.playbebe.review.dto.ReviewCreateDTO;
 import com.knu.server.playbebe.review.dto.ReviewListResDTO;
 import com.knu.server.playbebe.review.model.Image;
 import com.knu.server.playbebe.review.model.Review;
+import com.knu.server.playbebe.review.repository.ReviewRepository;
 import com.knu.server.playbebe.review.service.FileService;
 import com.knu.server.playbebe.review.service.ReviewBasicService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,48 +30,36 @@ import java.nio.file.Paths;
 public class ReviewController {
 
     private final ReviewBasicService reviewBasicService;
-    private final FileService fileService;
 
     @GetMapping("/{page}")
-    public ResponseEntity<?> getLatestReview(@PathVariable int page){
+    public ResponseEntity<?> getLatestReview(@PathVariable int page) throws IOException {
         ReviewListResDTO list = reviewBasicService.getLatestReview(page);
 
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<?> createReview(@RequestPart ReviewCreateDTO request) throws IOException {
-        String result = reviewBasicService.insertReview(request, null);
+    @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> createReview(@RequestPart ReviewCreateDTO request, @RequestPart MultipartFile imgFile) throws IOException {
+        String result = reviewBasicService.insertReview(request, imgFile);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    /** 리뷰에 이미지를 삽입할 때 함수 **/
-//    @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-//    public ResponseEntity<?> createReview(@RequestPart ReviewCreateDTO request, @RequestPart MultipartFile imgFile) throws IOException {
-//        String result = reviewBasicService.insertReview(request, imgFile);
-//        System.out.println("content type: "+imgFile.getContentType());
+    /** 이미지 파일을 안보낼 경우 **/
+//    @PostMapping(value = "/create")
+//    public ResponseEntity<?> createReview(@RequestPart ReviewCreateDTO request) throws IOException {
+//        String result = reviewBasicService.insertReview(request, null);
 //
 //        return ResponseEntity.status(HttpStatus.CREATED).body(result);
 //    }
 
-//    @GetMapping("/getreview/{reviewId}")
-//    public ResponseEntity<?> getReview(@PathVariable("reviewId") Long id) throws IOException {
-//        try{
-//            Review review = reviewBasicService.getReview(id);
-//            FileSystemResource resource = fileService.findFile(review.getImage().getStorePath());
-//            if(!resource.exists()){
-//                throw new FileNotFoundException();
-//            };
-//            HttpHeaders header = new HttpHeaders();
-//            Path filePath = Paths.get(review.getImage().getOriginalFilename());
-//            header.add("Content-Type", Files.probeContentType(filePath));
-//            ReviewImageDTO reviewImageDTO = new ReviewImageDTO();
-//            reviewImageDTO.setImage(resource);
-//            return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
-//        }
-//        catch (Exception e){
-//            throw new FileNotFoundException();
-//        }
+    /** review id로 review 지우기**/
+//    @DeleteMapping("/delete/{id}")
+//    @Transactional
+//    public ResponseEntity<?> deleteReview(@PathVariable Long id){
+//        reviewRepository.deleteReview(id);
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(null);
 //    }
+
 }

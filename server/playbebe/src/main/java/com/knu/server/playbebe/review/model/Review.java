@@ -37,7 +37,7 @@ public class Review extends TimeStamped{
     @JoinColumn(name = "place_id")
     private Place place;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

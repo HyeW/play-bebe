@@ -13,11 +13,12 @@ import javax.persistence.Embeddable;
 public class Image {
     private String originalFilename;
     private String storePath;
-    //파일 확장자 종류
+    private String extension;
 
     @Builder
-    public Image(String originalFilename, String storePath) {
+    public Image(String originalFilename, String storePath, String extension) {
         this.originalFilename = originalFilename;
         this.storePath = storePath;
+        this.extension = extension;
     }
 }

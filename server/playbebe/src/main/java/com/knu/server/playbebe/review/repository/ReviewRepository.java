@@ -30,4 +30,7 @@ public class ReviewRepository {
                 .getResultList();
     }
 
+    public void deleteReview(Long id){
+        em.remove(findReview(id));
+    }
 }
