@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.util.Base64;
+import org.apache.hadoop.yarn.webapp.NotFoundException;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -91,29 +93,24 @@ public class ReviewBasicService {
         return result;
     }
 
-    public ReviewBasicResDTO createReviewBasicResDTO(Review r) throws IOException {
-        ReviewImageDTO image = null;
+    public ReviewBasicResDTO createReviewBasicResDTO(Review r) {
 
-        if(r.getImage() != null) {
-            FileSystemResource resource = fileService.findFile(r.getImage().getStorePath());
-            if (!resource.exists()) {
-                throw new FileNotFoundException();
-            }
-            InputStream imageStream = new FileInputStream(r.getImage().getStorePath());
-            byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-            imageByteArray = Base64.encodeBase64(imageByteArray);
-            imageStream.close();
-            System.out.println(r.getImage().getExtension());
-            image = ReviewImageDTO.builder()
-                    .imageFile(imageByteArray)
-                    .imageExtension(r.getImage().getExtension())
-                    .build();
-        }
-        return new ReviewBasicResDTO(r.getContent(), r.getRating(), r.getVisitDate(), r.getCreatedAt(),
+        return new ReviewBasicResDTO(r.getId(), r.getContent(), r.getRating(), r.getVisitDate(), r.getCreatedAt(),
                         r.getUser().getNickname(), r.getPlace().getId(),
-                        r.getPlace().getEstablishmentName(), r.getPlace().getAddress(),
-                        image);
+                        r.getPlace().getEstablishmentName(), r.getPlace().getAddress());
 
+    }
+
+    public Resource getFileImage(Long id){
+        Review review = reviewRepository.findReview(id);
+        if(review.getImage() == null)
+            return null;
+        FileSystemResource resource = new FileSystemResource(review.getImage().getStorePath());
+        if(!resource.exists()){
+            throw new NotFoundException();
+        }
+
+        return resource;
     }
 
     public Review getReviewImage(Long id) {

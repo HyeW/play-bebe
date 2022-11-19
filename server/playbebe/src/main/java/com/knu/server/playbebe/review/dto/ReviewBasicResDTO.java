@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 public class ReviewBasicResDTO {
 
+    private Long reviewId;          //리뷰 pk
     private String content;         //리뷰 내용
     private Double rating;             //리뷰 별점
     private LocalDate visitDate;    //방문 날짜
@@ -18,12 +19,12 @@ public class ReviewBasicResDTO {
     private Long placeId;           //유원지 pk
     private String establishmentName;       //유원지 이름
     private String address;                 //유원지 주소
-    private ReviewImageDTO image;
+
 
     @Builder
-    public ReviewBasicResDTO(String content, Double rating, LocalDate visitDate,
-                             LocalDateTime createDate, String nickname, Long placeId, String placeName, String address,
-                             ReviewImageDTO image) {
+    public ReviewBasicResDTO(Long id, String content, Double rating, LocalDate visitDate,
+                             LocalDateTime createDate, String nickname, Long placeId, String placeName, String address) {
+        this.reviewId = id;
         this.content = content;
         this.rating = rating;
         this.visitDate = visitDate;
@@ -32,6 +33,5 @@ public class ReviewBasicResDTO {
         this.placeId = placeId;
         this.establishmentName = placeName;
         this.address = address;
-        this.image = image;
     }
 }
