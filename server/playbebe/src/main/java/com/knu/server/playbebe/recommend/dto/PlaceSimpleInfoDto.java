@@ -14,6 +14,7 @@ import java.util.Objects;
 @NoArgsConstructor
 public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
 
+    private Long id;
     private String name;
     private String simpleAddress;
     private Double totalRating;
@@ -22,6 +23,7 @@ public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
     private String distanceString;
 
     public PlaceSimpleInfoDto(Place place, double latitude, double longitude) {
+        this.id = place.getId();
         this.name = place.getEstablishmentName();
         this.simpleAddress = getSimpleAddress(place.getAddress());
         this.totalRating = Math.round(place.getTotalRating() * 10) / 10.0;
