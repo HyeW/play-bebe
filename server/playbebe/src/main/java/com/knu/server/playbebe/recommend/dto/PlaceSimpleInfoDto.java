@@ -4,11 +4,13 @@ import com.knu.server.playbebe.recommend.model.Place;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
 @Getter
 @Setter
+@Slf4j
 @NoArgsConstructor
 public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
 
@@ -16,14 +18,20 @@ public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
     private String simpleAddress;
     private Double totalRating;
     private int wantToVisit;
-    private double distance;
+    private Double distance;
+    private String distanceString;
 
     public PlaceSimpleInfoDto(Place place, double latitude, double longitude) {
         this.name = place.getEstablishmentName();
         this.simpleAddress = getSimpleAddress(place.getAddress());
-        this.totalRating = place.getTotalRating();
+        this.totalRating = Math.round(place.getTotalRating() * 10) / 10.0;
         this.wantToVisit = place.getWantToVisit();
         this.distance = distance(place.getLatitude(), place.getLongitude(), latitude, longitude, "meter");
+        if (distance / 1000 < 1) this.distanceString = String.format("%.1f", distance) + "m";
+        else {
+            double kilo = distance(place.getLatitude(), place.getLongitude(), latitude, longitude, "kilometer");
+            this.distanceString = String.format("%.1f", kilo) + "km";
+        }
     }
 
     @Override
