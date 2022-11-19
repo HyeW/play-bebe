@@ -21,8 +21,9 @@ public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
     private int wantToVisit;
     private Double distance;
     private String distanceString;
+    private Long reviewId;
 
-    public PlaceSimpleInfoDto(Place place, double latitude, double longitude) {
+    public PlaceSimpleInfoDto(Place place, double latitude, double longitude, Long reviewId) {
         this.id = place.getId();
         this.name = place.getEstablishmentName();
         this.simpleAddress = getSimpleAddress(place.getAddress());
@@ -34,6 +35,7 @@ public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
             double kilo = distance(place.getLatitude(), place.getLongitude(), latitude, longitude, "kilometer");
             this.distanceString = String.format("%.1f", kilo) + "km";
         }
+        this.reviewId = reviewId;
     }
 
     @Override
