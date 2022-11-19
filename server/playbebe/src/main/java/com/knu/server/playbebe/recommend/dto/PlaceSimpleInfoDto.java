@@ -4,11 +4,13 @@ import com.knu.server.playbebe.recommend.model.Place;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
 @Getter
 @Setter
+@Slf4j
 @NoArgsConstructor
 public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
 
@@ -16,19 +18,38 @@ public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
     private String simpleAddress;
     private Double totalRating;
     private int wantToVisit;
-    private double distance;
+    private Double distance;
+    private String distanceString;
 
     public PlaceSimpleInfoDto(Place place, double latitude, double longitude) {
         this.name = place.getEstablishmentName();
-        this.simpleAddress = place.getAddress();
-        this.totalRating = place.getTotalRating();
+        this.simpleAddress = getSimpleAddress(place.getAddress());
+        this.totalRating = Math.round(place.getTotalRating() * 10) / 10.0;
         this.wantToVisit = place.getWantToVisit();
         this.distance = distance(place.getLatitude(), place.getLongitude(), latitude, longitude, "meter");
+        if (distance / 1000 < 1) this.distanceString = String.format("%.1f", distance) + "m";
+        else {
+            double kilo = distance(place.getLatitude(), place.getLongitude(), latitude, longitude, "kilometer");
+            this.distanceString = String.format("%.1f", kilo) + "km";
+        }
     }
 
     @Override
     public int compareTo(PlaceSimpleInfoDto o) {
         return Double.compare(this.distance, o.distance);
+    }
+
+    private String getSimpleAddress(String address) {
+        StringBuilder simpleAddress = new StringBuilder();
+
+        int cnt = 0;
+        for (String cur : address.split(" ")) {
+            if (cnt == 2) break;
+            simpleAddress.append(cur);
+            simpleAddress.append(" ");
+            cnt++;
+        }
+        return simpleAddress.toString();
     }
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
