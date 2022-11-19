@@ -20,7 +20,7 @@ public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
 
     public PlaceSimpleInfoDto(Place place, double latitude, double longitude) {
         this.name = place.getEstablishmentName();
-        this.simpleAddress = place.getAddress();
+        this.simpleAddress = getSimpleAddress(place.getAddress());
         this.totalRating = place.getTotalRating();
         this.wantToVisit = place.getWantToVisit();
         this.distance = distance(place.getLatitude(), place.getLongitude(), latitude, longitude, "meter");
@@ -29,6 +29,19 @@ public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
     @Override
     public int compareTo(PlaceSimpleInfoDto o) {
         return Double.compare(this.distance, o.distance);
+    }
+
+    private String getSimpleAddress(String address) {
+        StringBuilder simpleAddress = new StringBuilder();
+
+        int cnt = 0;
+        for (String cur : address.split(" ")) {
+            if (cnt == 2) break;
+            simpleAddress.append(cur);
+            simpleAddress.append(" ");
+            cnt++;
+        }
+        return simpleAddress.toString();
     }
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
