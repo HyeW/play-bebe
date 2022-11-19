@@ -20,7 +20,7 @@ public class SchedulerService {
     private final VisitRepository visitRepository;
     private final PlaceRepository placeRepository;
 
-    @Scheduled(cron = "0 0 0 * * *") // ∏≈¿œ ø¿¿¸ 5Ω√ ¡§∞¢
+    @Scheduled(cron = "0 0 0 * * *") // Îß§Ïùº Ïò§Ï†Ñ 5Ïãú Ï†ïÍ∞Å
     public void deleteExpiredVisit(){
         List<Visit> visits = visitRepository.findAll();
 

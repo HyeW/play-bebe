@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/visit")
+@RequestMapping("/api/visit")
 @RequiredArgsConstructor
 public class VisitController {
 
