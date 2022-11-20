@@ -35,12 +35,14 @@ public class VisitService {
         return true;
     }
 
-    public boolean deleteVisit(VisitRequestDto visitRequestDto) {
-        boolean existPlace = placeRepository.existsById(visitRequestDto.getPlaceId());
-        boolean existUser = userRepository.existsById(visitRequestDto.getUserId());
+    public boolean deleteVisit(Long userId, Long placeId) {
+        boolean existPlace = placeRepository.existsById(placeId);
+        boolean existUser = userRepository.existsById(userId);
         if (!existPlace || !existUser) return false;
 
-        Visit curVisit = visitRepository.findByUserIdAndPlace_Id(visitRequestDto.getUserId(), visitRequestDto.getPlaceId());
+        Visit curVisit = visitRepository.findByUserIdAndPlace_Id(userId, placeId);
+        Optional<Place> curPlace = placeRepository.findById(curVisit.getPlace().getId());
+        curPlace.ifPresent(place -> place.removeVisit(curVisit));
         visitRepository.delete(curVisit);
         return true;
     }
