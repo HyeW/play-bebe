@@ -1,12 +1,9 @@
 package com.knu.server.playbebe.detail.dto;
 
-import com.knu.server.playbebe.review.model.Image;
-import com.knu.server.playbebe.visit.model.Visit;
 import com.knu.server.playbebe.weather.dto.WeatherDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -20,7 +17,7 @@ public class DetailDto {
     private Long pictureId;
     private String distance;
     private double rating;
-    private boolean isVisit;
+    private boolean visitSelected;
 
 
     public void setPlaceInfo(PlaceDto placeDto){
@@ -31,7 +28,7 @@ public class DetailDto {
 
     public void setVisitInfo(VisitDto visitDto){
         this.visitNum = visitDto.getVisitNum();
-        this.isVisit = visitDto.isVisit();
+        this.visitSelected = visitDto.isVisitSelected();
     }
 
     public void setWeatherInfo(WeatherDto weatherdto){

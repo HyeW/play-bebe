@@ -8,10 +8,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class VisitDto {
     private int visitNum;
-    private boolean isVisit;
+    private boolean visitSelected;
 
-    public VisitDto(int visitNum, boolean isVisit){
+    public VisitDto(int visitNum, boolean visitSelected){
         this.visitNum = visitNum;
-        this.isVisit = isVisit;
+        this.visitSelected = visitSelected;
     }
 }
