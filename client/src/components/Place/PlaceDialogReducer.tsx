@@ -18,6 +18,7 @@ const TYPE = {
   SET_WIND_SPEED: `${HEADER}/SET_WIND_SPEED` as const,
   SET_PICTURE_ID: `${HEADER}/SET_PICTURE_ID` as const,
   SET_IS_VISIT: `${HEADER}/SET_IS_VISIT` as const,
+  SET_LOADING: `${HEADER}/SET_LOADING` as const,
 };
 
 export const PlaceDialogAction = {
@@ -38,6 +39,7 @@ export const PlaceDialogAction = {
   setWindSpeed: (windSpeed: string) => ({type: TYPE.SET_WIND_SPEED, payload: windSpeed}),
   setPictureId: (pictureId: number) => ({type: TYPE.SET_PICTURE_ID, payload: pictureId}),
   setIsVisit: (isVisit: boolean) => ({type: TYPE.SET_IS_VISIT, payload: isVisit}),
+  setLoading: (isLoading: boolean) => ({type: TYPE.SET_LOADING, payload: isLoading}),
 };
 
 type PlaceDialogActionType =
@@ -57,7 +59,8 @@ type PlaceDialogActionType =
   ReturnType<typeof PlaceDialogAction.setRainyType> |
   ReturnType<typeof PlaceDialogAction.setWindSpeed> |
   ReturnType<typeof PlaceDialogAction.setPictureId> |
-  ReturnType<typeof PlaceDialogAction.setIsVisit>;
+  ReturnType<typeof PlaceDialogAction.setIsVisit> |
+  ReturnType<typeof PlaceDialogAction.setLoading>;
 
 
 // state
@@ -79,6 +82,7 @@ type PlaceDialogState = {
   windSpeed: string,
   pictureId: number,
   isVisit: boolean,
+  isLoading: boolean,
 }
 
 const INIT_PLACE_DIALOG_STATE: PlaceDialogState = {
@@ -99,6 +103,7 @@ const INIT_PLACE_DIALOG_STATE: PlaceDialogState = {
   windSpeed: '',
   pictureId: 0,
   isVisit: false,
+  isLoading: true,
 };
 
 
@@ -139,6 +144,8 @@ export default function PlaceDialogReducer(state: PlaceDialogState = INIT_PLACE_
       return {...state, pictureId: action.payload};
     case TYPE.SET_IS_VISIT:
       return {...state, isVisit: action.payload};
+    case TYPE.SET_LOADING:
+      return {...state, isLoading: action.payload};
     default:
       return state;
   }

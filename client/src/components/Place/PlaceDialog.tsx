@@ -1,12 +1,12 @@
 import {
   Box,
   Button,
-  Chip,
+  Chip, CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  Grid, ToggleButton,
+  Grid, Stack, ToggleButton,
   Typography
 } from "@mui/material";
 import React, {useEffect} from "react";
@@ -45,6 +45,7 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
   const reviewId = useSelector((state: RootState) => state.PlaceDialogReducer.pictureId);
   const isVisit = useSelector((state: RootState) => state.PlaceDialogReducer.isVisit);
   const userId = useSelector((state: RootState) => state.LoginReducer.userId);
+  const isLoading = useSelector((state: RootState) => state.PlaceDialogReducer.isLoading);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -59,10 +60,10 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
   };
 
   const handleClickVisitToggleButton = () => {
-    if(isVisit) {
-      deleteVisitData(userId, placeId, ()=>dispatch(PlaceDialogAction.setIsVisit(!isVisit)));
+    if (isVisit) {
+      deleteVisitData(userId, placeId, () => dispatch(PlaceDialogAction.setIsVisit(!isVisit)));
     } else {
-      sendVisitData(userId, placeId, ()=>dispatch(PlaceDialogAction.setIsVisit(!isVisit)));
+      sendVisitData(userId, placeId, () => dispatch(PlaceDialogAction.setIsVisit(!isVisit)));
     }
     dispatch(PlaceDialogAction.setIsVisit(!isVisit));
   };
@@ -73,24 +74,34 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
       onClose={handleClose}
     >
       <DialogContent>
-        <PlaceCard name={placeName} simpleAddress={address} totalRating={rating} wantToVisit={visitCount}
-                   distanceString={distance} id={placeId} reviewId={reviewId}/>
-        <WeatherInfo/>
-        <DialogContentText mt={3}>
-          {reviewContent}
-        </DialogContentText>
-        <Grid container mt={3} spacing={1}>
-          <Grid item xs>
-            <GoToWriteReviewButton handleClickGoToWriteReviewButton={handleClickGoToWriteReviewButton}/>
-          </Grid>
-          <Grid item xs>
-            <GoToSeeReviewButton handleClickGoToSeeReviewButton={handleClickGoToSeeReviewButton}/>
-          </Grid>
-          <Grid item xs>
-            <VisitToggleButton isVisit={isVisit}
-                               handleClickVisitToggleButton={handleClickVisitToggleButton}/>
-          </Grid>
-        </Grid>
+        {isLoading ?
+          <Stack alignItems="center" mt={8}>
+            <CircularProgress/>
+            <Typography m={2}>
+              {'장소 세부 정보 로딩 중...'}
+            </Typography>
+          </Stack>
+          :
+          <>
+            <PlaceCard name={placeName} simpleAddress={address} totalRating={rating} wantToVisit={visitCount}
+                       distanceString={distance} id={placeId} reviewId={reviewId}/>
+            <WeatherInfo/>
+            <DialogContentText mt={3}>
+              {reviewContent}
+            </DialogContentText>
+            <Grid container mt={3} spacing={1}>
+              <Grid item xs>
+                <GoToWriteReviewButton handleClickGoToWriteReviewButton={handleClickGoToWriteReviewButton}/>
+              </Grid>
+              <Grid item xs>
+                <GoToSeeReviewButton handleClickGoToSeeReviewButton={handleClickGoToSeeReviewButton}/>
+              </Grid>
+              <Grid item xs>
+                <VisitToggleButton isVisit={isVisit}
+                                   handleClickVisitToggleButton={handleClickVisitToggleButton}/>
+              </Grid>
+            </Grid>
+          </>}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>{'닫기'}</Button>

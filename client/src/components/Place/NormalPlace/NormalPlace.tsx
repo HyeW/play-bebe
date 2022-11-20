@@ -80,6 +80,7 @@ const NormalPlaceCardList = () => {
   const handleClickPlaceCard = (data: PlaceCardProps) => {
     dispatch(PlaceDialogAction.setOpenPlaceDialog(true));
     dispatch(PlaceDialogAction.setPlaceId(data.id));
+    dispatch(PlaceDialogAction.setLoading(true));
 
     getDetailDialogData(data.id, userId, latitude, longitude, (newData) => {
       dispatch(PlaceDialogAction.setPlaceName(newData.placeName));
@@ -96,6 +97,7 @@ const NormalPlaceCardList = () => {
       dispatch(PlaceDialogAction.setPictureId(newData.pictureId));
       dispatch(PlaceDialogAction.setRating(newData.rating));
       dispatch(PlaceDialogAction.setIsVisit(newData.visitSelected));
+      dispatch(PlaceDialogAction.setLoading(false));
     });
   };
 
