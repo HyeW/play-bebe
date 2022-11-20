@@ -20,7 +20,7 @@ public class Review extends TimeStamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(length = Integer.MAX_VALUE)
     private String content;
 
     @Column
