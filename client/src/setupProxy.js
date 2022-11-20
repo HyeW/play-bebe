@@ -10,4 +10,10 @@ module.exports = function (app) {
             changeOrigin: true
         })
     );
+    app.use(
+        createProxyMiddleware('/login', {
+            target: `http://${BASE_URL}:8080`,
+            changeOrigin: true
+        })
+    );
 };
