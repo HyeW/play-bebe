@@ -1,7 +1,9 @@
 package com.knu.server.playbebe.auth.controller;
 
+import com.knu.server.playbebe.auth.dto.UserInfoDto;
 import com.knu.server.playbebe.auth.dto.UserJoinDto;
 import com.knu.server.playbebe.auth.dto.UserJoinResDto;
+import com.knu.server.playbebe.auth.model.User;
 import com.knu.server.playbebe.auth.repository.UserRepository;
 import com.knu.server.playbebe.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,15 @@ public class UserController {
 
         String result = userService.saveUser(userJoinDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+    @GetMapping("/user/{email}")
+    public ResponseEntity<?> getUserInfo(@PathVariable String email){
+        User user = userRepository.findByEmail(email);
+        UserInfoDto userInfoDto = UserInfoDto.builder()
+                .userId(user.getId())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(userInfoDto);
     }
 
 }

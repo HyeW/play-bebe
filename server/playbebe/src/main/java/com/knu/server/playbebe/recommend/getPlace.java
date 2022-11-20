@@ -38,13 +38,13 @@ public class getPlace {
     public static void getConnection() throws SQLException {
         String url = "jdbc:mysql://dbinstance.csaqw2bfsjnj.ap-northeast-2.rds.amazonaws.com:3306/playbebe";
         String id = "admin";
-        String pass = "dbinstance";
+        String pass = "playbebe";
         conn = DriverManager.getConnection(url,id,pass);
     }
 
     public static void insertQuery() throws IOException {
         String curPath = System.getProperty("user.dir");
-        String path = curPath + "/src/main/resources/static/fulldata_03_07_09_P.csv";
+        String path = curPath + "/src/main/resources/static/fulldata_03_07_08_P.csv";
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path),"euc-kr"));
         String line = null;
         br.readLine(); // 첫번째 줄 생략
@@ -76,8 +76,8 @@ public class getPlace {
                 pstmt.setString(6,establishmentName);
                 pstmt.setDouble(7,coordinateX);
                 pstmt.setDouble(8,coordinateY);
-                pstmt.setDouble(9,projection[0]);
-                pstmt.setDouble(10,projection[1]);
+                pstmt.setDouble(9,projection[1]);
+                pstmt.setDouble(10,projection[0]);
                 pstmt.executeUpdate();
                 System.out.println("insert 성공!");
             }

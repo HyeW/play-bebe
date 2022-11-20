@@ -14,24 +14,28 @@ import java.util.Objects;
 @NoArgsConstructor
 public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
 
+    private Long id;
     private String name;
     private String simpleAddress;
     private Double totalRating;
     private int wantToVisit;
     private Double distance;
     private String distanceString;
+    private Long reviewId;
 
-    public PlaceSimpleInfoDto(Place place, double latitude, double longitude) {
+    public PlaceSimpleInfoDto(Place place, double latitude, double longitude, Long reviewId, int wantToVisit) {
+        this.id = place.getId();
         this.name = place.getEstablishmentName();
         this.simpleAddress = getSimpleAddress(place.getAddress());
         this.totalRating = Math.round(place.getTotalRating() * 10) / 10.0;
-        this.wantToVisit = place.getWantToVisit();
+        this.wantToVisit = wantToVisit;
         this.distance = distance(place.getLatitude(), place.getLongitude(), latitude, longitude, "meter");
         if (distance / 1000 < 1) this.distanceString = String.format("%.1f", distance) + "m";
         else {
             double kilo = distance(place.getLatitude(), place.getLongitude(), latitude, longitude, "kilometer");
             this.distanceString = String.format("%.1f", kilo) + "km";
         }
+        this.reviewId = reviewId;
     }
 
     @Override

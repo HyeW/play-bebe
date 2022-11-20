@@ -1,8 +1,9 @@
 package com.knu.server.playbebe.detail.service;
 
-import com.knu.server.playbebe.detail.dto.DetailDto;
+import com.knu.server.playbebe.detail.dto.*;
 import com.knu.server.playbebe.recommend.model.Place;
 import com.knu.server.playbebe.recommend.repository.PlaceRepository;
+import com.knu.server.playbebe.review.model.Image;
 import com.knu.server.playbebe.review.model.Review;
 import com.knu.server.playbebe.review.repository.ReviewRepository;
 import com.knu.server.playbebe.visit.repository.VisitRepository;
@@ -36,52 +37,53 @@ public class DetailService {
     private final LocationRepository locationRepository;
 
     // 장소 정보
-    public DetailDto getPlaceInfo(long id) {
-        DetailDto detailDto = new DetailDto();
-        Place place = getPlace(id);
-        detailDto.setPlaceInfo(place.getEstablishmentName(), place.getAddress(), place.getTelephone());
-        return detailDto;
+    public PlaceDto getPlaceInfo(long placeId) {
+        Place place = getPlace(placeId);
+        return new PlaceDto(place.getEstablishmentName(), place.getAddress(), place.getTelephone());
     }
 
     // 방문 정보 (방문자 수, 특정 유저 방문 여부)
-    public DetailDto getVisitInfo(DetailDto detailDto, long placeId, long userId) {
+    public VisitDto getVisitInfo(long placeId, long userId) {
         int visitCount = visitRepository.findAllByPlace_Id(placeId).size();
-        boolean isVisit = visitRepository.existsVisitByUser_IdAndPlace_Id(userId,placeId);
-        detailDto.setVisitInfo(visitCount,isVisit);
-        return detailDto;
+        boolean visitSelected = visitRepository.existsVisitByUser_IdAndPlace_Id(userId, placeId);
+        return new VisitDto(visitCount, visitSelected);
     }
 
     //날씨 정보
-    public DetailDto getWeatherInfo(DetailDto detailDto, long id) throws IOException, JSONException {
+    public WeatherDto getWeatherInfo(long placeId) throws IOException, JSONException {
         DateTimeDto dateTimeDto = getCurDateTime(); // 현재 시간 정보
-        RegionNameDto regionNameDto = getRegionName(id); // 지역 이름
+        RegionNameDto regionNameDto = getRegionName(placeId); // 지역 이름
         CoordinateDto coordinateDto = getCurX_Y(regionNameDto); // 현재 위치에 따른 X,Y 좌료
         String JSONdata = getJSONdata(coordinateDto, dateTimeDto); // 날씨 JSON 정보
         WeatherDto weather = getWeather(JSONdata); // JSON 파싱해서 원하는 값 추출
-        detailDto.setWeather(weather);
-        return detailDto;
-    }
-
-    //최신 리뷰 1개
-    public DetailDto getReview(DetailDto detailDto, long id) {
-        List<Review> reviews = getPlace(id).getMessages();
-        int lastIdx = reviews.size() - 1;
-        String reviewContent = reviews.get(lastIdx).getContent();
-        detailDto.setReview(reviewContent, null);
-        return detailDto;
+        return weather;
     }
 
     // 평점
-    public DetailDto getRating(DetailDto detailDto, long id) {
-        double rate = getPlace(id).getTotalRating();
-        rate = Math.round(rate);
-        detailDto.setRating(rate);
-        return detailDto;
+    public RatingDto getRating(long placeId) {
+        double rate = getPlace(placeId).getTotalRating();
+        rate = Math.round(rate*10)/10.0;
+        return new RatingDto(rate);
     }
 
+    //최신 리뷰 1개(내용, 사진)
+    public ReviewDto getReview(long placeId) {
+        List<Review> reviews = getPlace(placeId).getMessages();
+        int lastIdx = reviews.size() - 1;
+        String reviewContent = null;
+        Long pictureId = null;
+
+        if(lastIdx>=0) {
+            reviewContent = reviews.get(lastIdx).getContent();
+            pictureId = reviews.get(lastIdx).getId();
+        }
+        return new ReviewDto(reviewContent, pictureId);
+    }
+
+
     //현재 위치로부터의 거리
-    public DetailDto getDistance(DetailDto detailDto, long id, double from_lat, double from_log) {
-        Place place = getPlace(id);
+    public DistanceDto getDistance(long placeId, double from_lat, double from_log) {
+        Place place = getPlace(placeId);
         double to_lat = place.getLatitude();
         double to_log = place.getLongitude();
         double theta = from_log - to_log;
@@ -93,9 +95,18 @@ public class DetailService {
         dist = dist * 1609.344;
         dist = Math.round(dist);
 
-        detailDto.setDistance(dist);
-        return detailDto;
+        StringBuilder sb = new StringBuilder();
+        if (dist >= 1000) {
+            dist /= 1000;
+            sb.append(dist);
+            sb.append("km");
+        } else {
+            sb.append(dist);
+            sb.append("m");
+        }
+        return new DistanceDto(sb.toString());
     }
+
 
     // This function converts decimal degrees to radians
     private static double deg2rad(double deg) {
@@ -174,7 +185,6 @@ public class DetailService {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");
-        System.out.println("Response code: " + conn.getResponseCode());
         BufferedReader rd;
         if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
             rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
