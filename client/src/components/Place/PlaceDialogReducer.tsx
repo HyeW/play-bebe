@@ -10,6 +10,7 @@ const TYPE = {
   SET_WEATHER_ICON: `${HEADER}/SET_WEATHER_ICON` as const,
   SET_WEATHER: `${HEADER}/SET_WEATHER` as const,
   SET_VISIT_SELECTED: `${HEADER}/SET_VISIT_SELECTED` as const,
+  SET_PLACE_ID: `${HEADER}/SET_PLACE_ID` as const,
 };
 
 export const PlaceDialogAction = {
@@ -22,6 +23,7 @@ export const PlaceDialogAction = {
   setWeatherIcon: (weatherIcon: number) => ({type: TYPE.SET_WEATHER_ICON, payload: weatherIcon}),
   setWeather: (weather: string) => ({type: TYPE.SET_WEATHER, payload: weather}),
   setVisitSelected: (selected: boolean) => ({type: TYPE.SET_VISIT_SELECTED, payload: selected}),
+  setPlaceId: (id: number|undefined) => ({type: TYPE.SET_PLACE_ID, payload: id}),
 };
 
 type PlaceDialogActionType =
@@ -33,7 +35,8 @@ type PlaceDialogActionType =
   ReturnType<typeof PlaceDialogAction.setDistance> |
   ReturnType<typeof PlaceDialogAction.setWeatherIcon> |
   ReturnType<typeof PlaceDialogAction.setWeather> |
-  ReturnType<typeof PlaceDialogAction.setVisitSelected>;
+  ReturnType<typeof PlaceDialogAction.setVisitSelected> |
+  ReturnType<typeof PlaceDialogAction.setPlaceId>;
 
 
 // state
@@ -47,6 +50,7 @@ type PlaceDialogState = {
   weatherIcon: number,
   weather: string,
   visitSelected: boolean,
+  placeId: number|undefined,
 }
 
 const INIT_PLACE_DIALOG_STATE: PlaceDialogState = {
@@ -59,6 +63,7 @@ const INIT_PLACE_DIALOG_STATE: PlaceDialogState = {
   weatherIcon: 0,
   weather: '',
   visitSelected: false,
+  placeId: 0,
 };
 
 
@@ -83,6 +88,8 @@ export default function PlaceDialogReducer(state: PlaceDialogState = INIT_PLACE_
       return {...state, weather: action.payload};
     case TYPE.SET_VISIT_SELECTED:
       return {...state, visitSelected: action.payload};
+    case TYPE.SET_PLACE_ID:
+      return {...state, placeId: action.payload};
     default:
       return state;
   }

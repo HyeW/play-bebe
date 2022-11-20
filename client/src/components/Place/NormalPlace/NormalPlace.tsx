@@ -5,29 +5,50 @@ import {RootState} from "../../../store";
 import {NormalPlaceAction} from "./NormalPlaceReducer";
 import React, {useEffect} from "react";
 import PlaceCard, {PlaceCardProps} from "../PlaceCard";
-import {tempData} from "../HotPlace/HotPlace";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {PlaceDialogAction} from "../PlaceDialogReducer";
+import {getNormalPlaceDistanceData, getNormalPlaceStarsData} from "../../../api/place";
 
 export default function NormalPlace() {
   const dispatch = useDispatch();
   const tabValue = useSelector((state: RootState) => state.NormalPlaceReducer.tabValue);
   const data = useSelector((state: RootState) => state.NormalPlaceReducer.data);
   const seeMoreCount = useSelector((state: RootState) => state.NormalPlaceReducer.seeMoreCount);
+  const latitude = useSelector((state: RootState) => state.HotPlaceReducer.latitude);
+  const longitude = useSelector((state: RootState) => state.HotPlaceReducer.longitude);
 
   useEffect(() => {
-    dispatch(NormalPlaceAction.setData(tempData));
+    getNormalPlaceDistanceData(seeMoreCount, latitude, longitude,
+      (newData) => dispatch(NormalPlaceAction.setData(newData)));
   }, []);
 
+
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
-    dispatch(NormalPlaceAction.setData(tempData));
+    if (newValue === 0) {
+      getNormalPlaceDistanceData(seeMoreCount, latitude, longitude,
+        (newData) => dispatch(NormalPlaceAction.setData(newData)));
+    } else {
+      getNormalPlaceStarsData(seeMoreCount, latitude, longitude,
+        (newData) => dispatch(NormalPlaceAction.setData(newData)));
+    }
     dispatch(NormalPlaceAction.setTabValue(newValue));
     dispatch(NormalPlaceAction.setSeeMoreCount(0));
   };
 
   const handleClickSeeMoreButton = () => {
-    dispatch(NormalPlaceAction.setData(data.concat(tempData)));
-    dispatch(NormalPlaceAction.setSeeMoreCount(seeMoreCount + 1));
+    if (tabValue === 0) {
+      getNormalPlaceDistanceData(seeMoreCount, latitude, longitude,
+        (newData) => {
+          dispatch(NormalPlaceAction.setData(data.concat(newData)));
+          dispatch(NormalPlaceAction.setSeeMoreCount(seeMoreCount + 1));
+        });
+    } else {
+      getNormalPlaceStarsData(seeMoreCount, latitude, longitude,
+        (newData) => {
+          dispatch(NormalPlaceAction.setData(data.concat(newData)));
+          dispatch(NormalPlaceAction.setSeeMoreCount(seeMoreCount + 1));
+        });
+    }
   };
 
   return (
@@ -54,19 +75,20 @@ const NormalPlaceCardList = () => {
 
   const handleClickPlaceCard = (data: PlaceCardProps) => {
     dispatch(PlaceDialogAction.setOpenPlaceDialog(true));
-    dispatch(PlaceDialogAction.setPlaceName(data.placeName));
-    dispatch(PlaceDialogAction.setAddress(data.address));
-    dispatch(PlaceDialogAction.setRating(data.rating));
-    dispatch(PlaceDialogAction.setDistance(data.distance));
-    dispatch(PlaceDialogAction.setVisitCount(data.visitCount));
+    dispatch(PlaceDialogAction.setPlaceName(data.name));
+    dispatch(PlaceDialogAction.setAddress(data.simpleAddress));
+    dispatch(PlaceDialogAction.setRating(data.totalRating));
+    dispatch(PlaceDialogAction.setDistance(data.distanceString));
+    dispatch(PlaceDialogAction.setVisitCount(data.wantToVisit));
+    dispatch(PlaceDialogAction.setPlaceId(data.placeId));
   };
 
   return (
     <Grid container spacing={3}>
-      {data.map(data =>
-        <Grid item xs={4} key={data.placeName}>
-          <PlaceCard placeName={data.placeName} address={data.address} rating={data.rating}
-                     visitCount={data.visitCount} distance={data.distance} isHotPlaceCard={false}
+      {data.map((data, index) =>
+        <Grid item xs={4} key={index}>
+          <PlaceCard name={data.name} simpleAddress={data.simpleAddress} totalRating={data.totalRating}
+                     wantToVisit={data.wantToVisit} distanceString={data.distanceString} isHotPlaceCard={false}
                      onClick={() => handleClickPlaceCard(data)}/>
         </Grid>)}
     </Grid>

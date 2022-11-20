@@ -3,17 +3,18 @@ import {amber} from "@mui/material/colors";
 import React from "react";
 
 export interface PlaceCardProps extends PlaceCardTextProps, PlaceCardIconProps, PlaceCardImageProps {
+  placeId?: number,
   onClick?: ()=>void,
 }
 
-export default function PlaceCard({placeName, address, rating, visitCount, distance, isHotPlaceCard, onClick}: PlaceCardProps) {
+export default function PlaceCard({name, simpleAddress, totalRating, wantToVisit, distanceString, isHotPlaceCard, onClick}: PlaceCardProps) {
   return (
     <div onClick={onClick}>
       <PlaceCardImage isHotPlaceCard={isHotPlaceCard}/>
       <Stack direction="row" mt={1}>
-        <PlaceCardText placeName={placeName} address={address}/>
+        <PlaceCardText name={name} simpleAddress={simpleAddress}/>
         <Box flexGrow={1}/>
-        <PlaceCardIcon rating={rating} visitCount={visitCount} distance={distance}/>
+        <PlaceCardIcon totalRating={totalRating} wantToVisit={wantToVisit} distanceString={distanceString}/>
       </Stack>
     </div>
   );
@@ -30,33 +31,33 @@ const PlaceCardImage = ({isHotPlaceCard}: PlaceCardImageProps) => {
 };
 
 interface PlaceCardTextProps {
-  placeName: string,
-  address: string,
+  name: string,
+  simpleAddress: string,
 }
 
-const PlaceCardText = ({placeName, address}: PlaceCardTextProps) => {
+const PlaceCardText = ({name, simpleAddress}: PlaceCardTextProps) => {
   return (
     <Stack direction="column">
-      <Typography sx={{fontWeight: 600}} color="text.primary">{placeName}</Typography>
-      <Typography color="text.secondary">{address}</Typography>
+      <Typography sx={{fontWeight: 600}} color="text.primary">{name}</Typography>
+      <Typography color="text.secondary">{simpleAddress}</Typography>
     </Stack>
   );
 };
 
 interface PlaceCardIconProps {
-  rating: number,
-  visitCount: number,
-  distance: string,
+  totalRating: number,
+  wantToVisit: number,
+  distanceString: string,
 }
 
-const PlaceCardIcon = ({rating, visitCount, distance}: PlaceCardIconProps) => {
+const PlaceCardIcon = ({totalRating, wantToVisit, distanceString}: PlaceCardIconProps) => {
   return (
     <Stack direction="column">
       <Stack direction="row" spacing={2}>
-        <Typography color={amber[500]}>{'⭐ '}{rating}</Typography>
-        <Typography color={amber[800]}>{'👍🏻 '}{visitCount}</Typography>
+        <Typography color={amber[500]}>{'⭐ '}{totalRating}</Typography>
+        <Typography color={amber[800]}>{'👍🏻 '}{wantToVisit}</Typography>
       </Stack>
-      <Typography textAlign="right" color="primary">{distance}</Typography>
+      <Typography textAlign="right" color="primary">{distanceString}</Typography>
     </Stack>
   );
 };
