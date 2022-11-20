@@ -32,13 +32,12 @@ public class PlaceService {
     }
 
     public List<PlaceSimpleInfoDto> orderByDistance(int page, double latitude, double longitude) {
-        List<Place> places = placeRepository.findAll();
-        List<PlaceSimpleInfoDto> simpleInfoDtos = places.stream()
-                .map(place -> new PlaceSimpleInfoDto(place, latitude, longitude, getLatestReviewId(place)))
-                .sorted()
-                .collect(Collectors.toList());
+        PageRequest pageRequest = PageRequest.of(page, 6);
+        Page<Place> places = placeRepository.findBySTDistance(pageRequest, latitude, longitude);
 
-        return simpleInfoDtos.subList(page * 6, (page + 1) * 6);
+        return places.stream()
+                .map(place -> new PlaceSimpleInfoDto(place, latitude, longitude, getLatestReviewId(place)))
+                .collect(Collectors.toList());
     }
 
     public List<PlaceSimpleInfoDto> todayHotPlaces(double latitude, double longitude) {
