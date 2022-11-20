@@ -23,12 +23,12 @@ public class PlaceSimpleInfoDto implements Comparable<PlaceSimpleInfoDto> {
     private String distanceString;
     private Long reviewId;
 
-    public PlaceSimpleInfoDto(Place place, double latitude, double longitude, Long reviewId) {
+    public PlaceSimpleInfoDto(Place place, double latitude, double longitude, Long reviewId, int wantToVisit) {
         this.id = place.getId();
         this.name = place.getEstablishmentName();
         this.simpleAddress = getSimpleAddress(place.getAddress());
         this.totalRating = Math.round(place.getTotalRating() * 10) / 10.0;
-        this.wantToVisit = place.getWantToVisit();
+        this.wantToVisit = wantToVisit;
         this.distance = distance(place.getLatitude(), place.getLongitude(), latitude, longitude, "meter");
         if (distance / 1000 < 1) this.distanceString = String.format("%.1f", distance) + "m";
         else {
