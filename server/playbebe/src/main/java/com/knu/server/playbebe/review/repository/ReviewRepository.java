@@ -28,7 +28,7 @@ public class ReviewRepository {
     public List<Review> findLatestReviewList(int page) {
         return em.createQuery("select r from Review r order by r.createdAt desc", Review.class)
                 .setFirstResult(page * 4)
-                .setMaxResults((page + 1) * 4)
+                .setMaxResults(4)
                 .getResultList();
     }
 
