@@ -45,8 +45,8 @@ public class DetailService {
     // 방문 정보 (방문자 수, 특정 유저 방문 여부)
     public VisitDto getVisitInfo(long placeId, long userId) {
         int visitCount = visitRepository.findAllByPlace_Id(placeId).size();
-        boolean isVisit = visitRepository.existsVisitByUser_IdAndPlace_Id(userId, placeId);
-        return new VisitDto(visitCount, isVisit);
+        boolean visitSelected = visitRepository.existsVisitByUser_IdAndPlace_Id(userId, placeId);
+        return new VisitDto(visitCount, visitSelected);
     }
 
     //날씨 정보
@@ -62,7 +62,7 @@ public class DetailService {
     // 평점
     public RatingDto getRating(long placeId) {
         double rate = getPlace(placeId).getTotalRating();
-        rate = Math.round(rate);
+        rate = Math.round(rate*10)/10.0;
         return new RatingDto(rate);
     }
 
@@ -73,7 +73,7 @@ public class DetailService {
         String reviewContent = null;
         Long pictureId = null;
 
-        if(lastIdx>0) {
+        if(lastIdx>=0) {
             reviewContent = reviews.get(lastIdx).getContent();
             pictureId = reviews.get(lastIdx).getId();
         }
