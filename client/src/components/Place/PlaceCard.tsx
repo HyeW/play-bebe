@@ -1,16 +1,26 @@
-import {Box, Skeleton, Stack, Typography} from "@mui/material";
+import {Box, Stack, Typography} from "@mui/material";
 import {amber} from "@mui/material/colors";
 import React from "react";
 
 export interface PlaceCardProps extends PlaceCardTextProps, PlaceCardIconProps, PlaceCardImageProps {
-  placeId?: number,
-  onClick?: ()=>void,
+  onClick?: () => void,
+  id: number,
 }
 
-export default function PlaceCard({name, simpleAddress, totalRating, wantToVisit, distanceString, isHotPlaceCard, onClick}: PlaceCardProps) {
+export default function PlaceCard({
+                                    name,
+                                    simpleAddress,
+                                    totalRating,
+                                    wantToVisit,
+                                    distanceString,
+                                    isHotPlaceCard,
+                                    onClick,
+                                    id,
+                                    reviewId
+                                  }: PlaceCardProps) {
   return (
     <div onClick={onClick}>
-      <PlaceCardImage isHotPlaceCard={isHotPlaceCard}/>
+      <PlaceCardImage isHotPlaceCard={isHotPlaceCard} reviewId={reviewId}/>
       <Stack direction="row" mt={1}>
         <PlaceCardText name={name} simpleAddress={simpleAddress}/>
         <Box flexGrow={1}/>
@@ -22,11 +32,14 @@ export default function PlaceCard({name, simpleAddress, totalRating, wantToVisit
 
 interface PlaceCardImageProps {
   isHotPlaceCard?: boolean,
+  reviewId: number,
 }
 
-const PlaceCardImage = ({isHotPlaceCard}: PlaceCardImageProps) => {
+const PlaceCardImage = ({isHotPlaceCard, reviewId}: PlaceCardImageProps) => {
   return (
-    <Skeleton variant="rectangular" width={isHotPlaceCard ? 350 : '100%'} height={200} sx={{mt: 1}}/>
+    <Box mt={1}>
+      <img src={`/api/review/image/${reviewId}`} width={isHotPlaceCard ? 350 : '100%'} height={200} alt=''></img>
+    </Box>
   );
 };
 

@@ -29,8 +29,8 @@ type HotPlaceState = {
 
 const INIT_HOT_PLACE_STATE: HotPlaceState = {
   data: [],
-  latitude: 0,
-  longitude: 0,
+  latitude: 35.8886283,
+  longitude: 128.6005226,
 };
 
 

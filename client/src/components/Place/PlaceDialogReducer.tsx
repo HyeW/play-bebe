@@ -9,8 +9,15 @@ const TYPE = {
   SET_DISTANCE: `${HEADER}/SET_DISTANCE` as const,
   SET_WEATHER_ICON: `${HEADER}/SET_WEATHER_ICON` as const,
   SET_WEATHER: `${HEADER}/SET_WEATHER` as const,
-  SET_VISIT_SELECTED: `${HEADER}/SET_VISIT_SELECTED` as const,
   SET_PLACE_ID: `${HEADER}/SET_PLACE_ID` as const,
+  SET_REVIEW_CONTENT: `${HEADER}/SET_REVIEW_CONTENT` as const,
+  SET_SKY: `${HEADER}/SET_SKY` as const,
+  SET_DEGREE: `${HEADER}/SET_DEGREE` as const,
+  SET_RAINY_PROB: `${HEADER}/SET_RAINY_PROB` as const,
+  SET_RAINY_TYPE: `${HEADER}/SET_RAINY_TYPE` as const,
+  SET_WIND_SPEED: `${HEADER}/SET_WIND_SPEED` as const,
+  SET_PICTURE_ID: `${HEADER}/SET_PICTURE_ID` as const,
+  SET_IS_VISIT: `${HEADER}/SET_IS_VISIT` as const,
 };
 
 export const PlaceDialogAction = {
@@ -22,8 +29,15 @@ export const PlaceDialogAction = {
   setDistance: (distance: string) => ({type: TYPE.SET_DISTANCE, payload: distance}),
   setWeatherIcon: (weatherIcon: number) => ({type: TYPE.SET_WEATHER_ICON, payload: weatherIcon}),
   setWeather: (weather: string) => ({type: TYPE.SET_WEATHER, payload: weather}),
-  setVisitSelected: (selected: boolean) => ({type: TYPE.SET_VISIT_SELECTED, payload: selected}),
-  setPlaceId: (id: number|undefined) => ({type: TYPE.SET_PLACE_ID, payload: id}),
+  setPlaceId: (id: number) => ({type: TYPE.SET_PLACE_ID, payload: id}),
+  setReviewContent: (content: string) => ({type: TYPE.SET_REVIEW_CONTENT, payload: content}),
+  setSky: (sky: string) => ({type: TYPE.SET_SKY, payload: sky}),
+  setDegree: (degree: string) => ({type: TYPE.SET_DEGREE, payload: degree}),
+  setRainyProb: (rainyProb: string) => ({type: TYPE.SET_RAINY_PROB, payload: rainyProb}),
+  setRainyType: (rainyType: string) => ({type: TYPE.SET_RAINY_TYPE, payload: rainyType}),
+  setWindSpeed: (windSpeed: string) => ({type: TYPE.SET_WIND_SPEED, payload: windSpeed}),
+  setPictureId: (pictureId: number) => ({type: TYPE.SET_PICTURE_ID, payload: pictureId}),
+  setIsVisit: (isVisit: boolean) => ({type: TYPE.SET_IS_VISIT, payload: isVisit}),
 };
 
 type PlaceDialogActionType =
@@ -35,8 +49,15 @@ type PlaceDialogActionType =
   ReturnType<typeof PlaceDialogAction.setDistance> |
   ReturnType<typeof PlaceDialogAction.setWeatherIcon> |
   ReturnType<typeof PlaceDialogAction.setWeather> |
-  ReturnType<typeof PlaceDialogAction.setVisitSelected> |
-  ReturnType<typeof PlaceDialogAction.setPlaceId>;
+  ReturnType<typeof PlaceDialogAction.setPlaceId> |
+  ReturnType<typeof PlaceDialogAction.setReviewContent> |
+  ReturnType<typeof PlaceDialogAction.setSky> |
+  ReturnType<typeof PlaceDialogAction.setDegree> |
+  ReturnType<typeof PlaceDialogAction.setRainyProb> |
+  ReturnType<typeof PlaceDialogAction.setRainyType> |
+  ReturnType<typeof PlaceDialogAction.setWindSpeed> |
+  ReturnType<typeof PlaceDialogAction.setPictureId> |
+  ReturnType<typeof PlaceDialogAction.setIsVisit>;
 
 
 // state
@@ -49,8 +70,15 @@ type PlaceDialogState = {
   distance: string,
   weatherIcon: number,
   weather: string,
-  visitSelected: boolean,
-  placeId: number|undefined,
+  placeId: number,
+  reviewContent: string,
+  sky: string,
+  degree: string,
+  rainyProb: string,
+  rainyType: string,
+  windSpeed: string,
+  pictureId: number,
+  isVisit: boolean,
 }
 
 const INIT_PLACE_DIALOG_STATE: PlaceDialogState = {
@@ -62,8 +90,15 @@ const INIT_PLACE_DIALOG_STATE: PlaceDialogState = {
   distance: '',
   weatherIcon: 0,
   weather: '',
-  visitSelected: false,
   placeId: 0,
+  reviewContent: '',
+  sky: '',
+  degree: '',
+  rainyProb: '',
+  rainyType: '',
+  windSpeed: '',
+  pictureId: 0,
+  isVisit: false,
 };
 
 
@@ -86,10 +121,24 @@ export default function PlaceDialogReducer(state: PlaceDialogState = INIT_PLACE_
       return {...state, weatherIcon: action.payload};
     case TYPE.SET_WEATHER:
       return {...state, weather: action.payload};
-    case TYPE.SET_VISIT_SELECTED:
-      return {...state, visitSelected: action.payload};
     case TYPE.SET_PLACE_ID:
       return {...state, placeId: action.payload};
+    case TYPE.SET_REVIEW_CONTENT:
+      return {...state, reviewContent: action.payload};
+    case TYPE.SET_SKY:
+      return {...state, sky: action.payload};
+    case TYPE.SET_DEGREE:
+      return {...state, degree: action.payload};
+    case TYPE.SET_RAINY_PROB:
+      return {...state, rainyProb: action.payload};
+    case TYPE.SET_RAINY_TYPE:
+      return {...state, rainyType: action.payload};
+    case TYPE.SET_WIND_SPEED:
+      return {...state, windSpeed: action.payload};
+    case TYPE.SET_PICTURE_ID:
+      return {...state, pictureId: action.payload};
+    case TYPE.SET_IS_VISIT:
+      return {...state, isVisit: action.payload};
     default:
       return state;
   }

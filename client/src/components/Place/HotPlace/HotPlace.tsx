@@ -10,12 +10,14 @@ import React, {useEffect} from "react";
 import {RootState} from "../../../store";
 import {HotPlaceAction} from "./HotPlaceReducer";
 import {getHotPlaceData} from "../../../api/place";
+import {getDetailDialogData} from "../../../api/detail";
 
 export default function HotPlace() {
   const dispatch = useDispatch();
   const data = useSelector((state: RootState) => state.HotPlaceReducer.data);
   const latitude = useSelector((state: RootState) => state.HotPlaceReducer.latitude);
   const longitude = useSelector((state: RootState) => state.HotPlaceReducer.longitude);
+  const userId = useSelector((state: RootState) => state.LoginReducer.userId);
 
   useEffect(() => {
     getHotPlaceData(latitude, longitude, (newData) => dispatch(HotPlaceAction.setData(newData)));
@@ -33,21 +35,34 @@ export default function HotPlace() {
 
   const handleClickPlaceCard = (data: PlaceCardProps) => {
     dispatch(PlaceDialogAction.setOpenPlaceDialog(true));
-    dispatch(PlaceDialogAction.setPlaceName(data.name));
-    dispatch(PlaceDialogAction.setAddress(data.simpleAddress));
-    dispatch(PlaceDialogAction.setRating(data.totalRating));
-    dispatch(PlaceDialogAction.setDistance(data.distanceString));
-    dispatch(PlaceDialogAction.setVisitCount(data.wantToVisit));
-    dispatch(PlaceDialogAction.setPlaceId(data.placeId));
+    dispatch(PlaceDialogAction.setPlaceId(data.id));
+
+    getDetailDialogData(data.id, userId, latitude, longitude, (newData) => {
+      dispatch(PlaceDialogAction.setPlaceName(newData.placeName));
+      dispatch(PlaceDialogAction.setAddress(newData.placeAddress));
+      // 전화번호는 UI 생략해서 데이터 안 씀
+      dispatch(PlaceDialogAction.setVisitCount(newData.visitNum));
+      dispatch(PlaceDialogAction.setReviewContent(newData.reviewContent));
+      dispatch(PlaceDialogAction.setDistance(newData.distance));
+      dispatch(PlaceDialogAction.setSky(newData.weather.sky));
+      dispatch(PlaceDialogAction.setDegree(newData.weather.degree));
+      dispatch(PlaceDialogAction.setRainyProb(newData.weather.rainyProb));
+      dispatch(PlaceDialogAction.setRainyType(newData.weather.rainyType));
+      dispatch(PlaceDialogAction.setWindSpeed(newData.weather.windSpeed));
+      dispatch(PlaceDialogAction.setPictureId(newData.pictureId));
+      dispatch(PlaceDialogAction.setRating(newData.rating));
+      dispatch(PlaceDialogAction.setIsVisit(newData.visitSelected));
+    });
   };
 
   return (
     <div>
       <HotPlaceTitle/>
       <Slider {...settings}>
-        {data.map(data =>
-          <PlaceCard key={data.name} name={data.name} simpleAddress={data.name} totalRating={data.totalRating}
+        {data.map((data, index) =>
+          <PlaceCard key={index} name={data.name} simpleAddress={data.name} totalRating={data.totalRating}
                      wantToVisit={data.wantToVisit} distanceString={data.distanceString} isHotPlaceCard={true}
+                     id={data.id} reviewId={data.reviewId}
                      onClick={() => handleClickPlaceCard(data)}/>)}
       </Slider>
     </div>

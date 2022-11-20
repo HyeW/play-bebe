@@ -25,6 +25,9 @@ import CreateIcon from "@mui/icons-material/Create";
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import {useNavigate} from "react-router-dom";
+import {deleteVisitData, sendVisitData} from "../../api/detail";
+import {getOnePlaceReviewData} from "../../api/review";
+import {SeeReviewAction} from "../Review/SeeReview/SeeReviewReducer";
 
 interface PlaceDialogProps {
   handleClose: () => void,
@@ -37,7 +40,11 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
   const rating = useSelector((state: RootState) => state.PlaceDialogReducer.rating);
   const visitCount = useSelector((state: RootState) => state.PlaceDialogReducer.visitCount);
   const distance = useSelector((state: RootState) => state.PlaceDialogReducer.distance);
-  const visitSelected = useSelector((state: RootState) => state.PlaceDialogReducer.visitSelected);
+  const placeId = useSelector((state: RootState) => state.PlaceDialogReducer.placeId);
+  const reviewContent = useSelector((state: RootState) => state.PlaceDialogReducer.reviewContent);
+  const reviewId = useSelector((state: RootState) => state.PlaceDialogReducer.pictureId);
+  const isVisit = useSelector((state: RootState) => state.PlaceDialogReducer.isVisit);
+  const userId = useSelector((state: RootState) => state.LoginReducer.userId);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,11 +54,17 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
   };
 
   const handleClickGoToSeeReviewButton = () => {
+    getOnePlaceReviewData(placeId, (newData) => dispatch(SeeReviewAction.setReviewData(newData)));
     navigate('/users-review-per-place');
   };
 
   const handleClickVisitToggleButton = () => {
-    dispatch(PlaceDialogAction.setVisitSelected(!visitSelected));
+    if(isVisit) {
+      deleteVisitData(userId, placeId, ()=>dispatch(PlaceDialogAction.setIsVisit(!isVisit)));
+    } else {
+      sendVisitData(userId, placeId, ()=>dispatch(PlaceDialogAction.setIsVisit(!isVisit)));
+    }
+    dispatch(PlaceDialogAction.setIsVisit(!isVisit));
   };
 
   return (
@@ -60,10 +73,11 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
       onClose={handleClose}
     >
       <DialogContent>
-        <PlaceCard name={placeName} simpleAddress={address} totalRating={rating} wantToVisit={visitCount} distanceString={distance}/>
+        <PlaceCard name={placeName} simpleAddress={address} totalRating={rating} wantToVisit={visitCount}
+                   distanceString={distance} id={placeId} reviewId={reviewId}/>
         <WeatherInfo/>
         <DialogContentText mt={3}>
-          {'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'}
+          {reviewContent}
         </DialogContentText>
         <Grid container mt={3} spacing={1}>
           <Grid item xs>
@@ -73,7 +87,7 @@ export default function PlaceDialog({handleClose}: PlaceDialogProps) {
             <GoToSeeReviewButton handleClickGoToSeeReviewButton={handleClickGoToSeeReviewButton}/>
           </Grid>
           <Grid item xs>
-            <VisitToggleButton visitSelected={visitSelected}
+            <VisitToggleButton isVisit={isVisit}
                                handleClickVisitToggleButton={handleClickVisitToggleButton}/>
           </Grid>
         </Grid>
@@ -107,13 +121,13 @@ const GoToSeeReviewButton = (props: { handleClickGoToSeeReviewButton: () => void
   );
 }
 
-const VisitToggleButton = (props: { visitSelected: boolean, handleClickVisitToggleButton: () => void }) => {
+const VisitToggleButton = (props: { isVisit: boolean, handleClickVisitToggleButton: () => void }) => {
   return (
     <Box sx={{display: 'flex', justifyContent: 'left'}}>
       <ToggleButton
         value="check"
         sx={{borderRadius: 9, py: 1, px: 3}}
-        selected={props.visitSelected}
+        selected={props.isVisit}
         onChange={props.handleClickVisitToggleButton}
         color="warning"
       >
@@ -136,10 +150,15 @@ function WeatherInfo() {
   const dispatch = useDispatch();
   const weather = useSelector((state: RootState) => state.PlaceDialogReducer.weather);
   const weatherIcon = useSelector((state: RootState) => state.PlaceDialogReducer.weatherIcon);
+  const degree = useSelector((state: RootState) => state.PlaceDialogReducer.degree);
+  const rainyProb = useSelector((state: RootState) => state.PlaceDialogReducer.rainyProb);
+  const windSpeed = useSelector((state: RootState) => state.PlaceDialogReducer.windSpeed);
+  const sky = useSelector((state: RootState) => state.PlaceDialogReducer.sky);
+  const rainyType = useSelector((state: RootState) => state.PlaceDialogReducer.rainyType);
 
   useEffect(() => {
-    decideWeatherType("3", "0");
-  }, []);
+    decideWeatherType(sky, rainyType);
+  }, [sky, rainyType]);
 
   const decideWeatherType = (skyType: string, rainyType: string) => {
     if (skyType === "1") {
@@ -166,9 +185,9 @@ function WeatherInfo() {
     <Box bgcolor={grey[200]} borderRadius={1} p={1.5} mt={3}>
       <Chip label="이곳의 현재 날씨" sx={{mb: 1.5}} color="primary"/>
       <Grid container direction="row" spacing={1.5}>
-        <Grid item xs><WeatherCard mainText="13C" subText={weather} iconType={weatherIcon}/></Grid>
-        <Grid item xs><WeatherCard mainText="10%" subText="강수확률" iconType={WEATHER_ICON_TYPE.WATER_DROP}/></Grid>
-        <Grid item xs><WeatherCard mainText="10m/s" subText="풍속" iconType={WEATHER_ICON_TYPE.WIND}/></Grid>
+        <Grid item xs><WeatherCard mainText={degree} subText={weather} iconType={weatherIcon}/></Grid>
+        <Grid item xs><WeatherCard mainText={rainyProb} subText="강수확률" iconType={WEATHER_ICON_TYPE.WATER_DROP}/></Grid>
+        <Grid item xs><WeatherCard mainText={windSpeed} subText="풍속" iconType={WEATHER_ICON_TYPE.WIND}/></Grid>
       </Grid>
     </Box>
   );
