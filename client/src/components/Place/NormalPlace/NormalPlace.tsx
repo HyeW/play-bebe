@@ -5,29 +5,51 @@ import {RootState} from "../../../store";
 import {NormalPlaceAction} from "./NormalPlaceReducer";
 import React, {useEffect} from "react";
 import PlaceCard, {PlaceCardProps} from "../PlaceCard";
-import {tempData} from "../HotPlace/HotPlace";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {PlaceDialogAction} from "../PlaceDialogReducer";
+import {getNormalPlaceDistanceData, getNormalPlaceStarsData} from "../../../api/place";
+import {getDetailDialogData} from "../../../api/detail";
 
 export default function NormalPlace() {
   const dispatch = useDispatch();
   const tabValue = useSelector((state: RootState) => state.NormalPlaceReducer.tabValue);
   const data = useSelector((state: RootState) => state.NormalPlaceReducer.data);
   const seeMoreCount = useSelector((state: RootState) => state.NormalPlaceReducer.seeMoreCount);
+  const latitude = useSelector((state: RootState) => state.HotPlaceReducer.latitude);
+  const longitude = useSelector((state: RootState) => state.HotPlaceReducer.longitude);
 
   useEffect(() => {
-    dispatch(NormalPlaceAction.setData(tempData));
+    getNormalPlaceDistanceData(seeMoreCount, latitude, longitude,
+      (newData) => dispatch(NormalPlaceAction.setData(newData)));
   }, []);
 
+
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
-    dispatch(NormalPlaceAction.setData(tempData));
+    if (newValue === 0) {
+      getNormalPlaceDistanceData(0, latitude, longitude,
+        (newData) => dispatch(NormalPlaceAction.setData(newData)));
+    } else {
+      getNormalPlaceStarsData(0, latitude, longitude,
+        (newData) => dispatch(NormalPlaceAction.setData(newData)));
+    }
     dispatch(NormalPlaceAction.setTabValue(newValue));
     dispatch(NormalPlaceAction.setSeeMoreCount(0));
   };
 
   const handleClickSeeMoreButton = () => {
-    dispatch(NormalPlaceAction.setData(data.concat(tempData)));
-    dispatch(NormalPlaceAction.setSeeMoreCount(seeMoreCount + 1));
+    if (tabValue === 0) {
+      getNormalPlaceDistanceData(seeMoreCount + 1, latitude, longitude,
+        (newData) => {
+          dispatch(NormalPlaceAction.setData(data.concat(newData)));
+          dispatch(NormalPlaceAction.setSeeMoreCount(seeMoreCount + 1));
+        });
+    } else {
+      getNormalPlaceStarsData(seeMoreCount + 1, latitude, longitude,
+        (newData) => {
+          dispatch(NormalPlaceAction.setData(data.concat(newData)));
+          dispatch(NormalPlaceAction.setSeeMoreCount(seeMoreCount + 1));
+        });
+    }
   };
 
   return (
@@ -51,22 +73,41 @@ export default function NormalPlace() {
 const NormalPlaceCardList = () => {
   const dispatch = useDispatch();
   const data = useSelector((state: RootState) => state.NormalPlaceReducer.data);
+  const latitude = useSelector((state: RootState) => state.HotPlaceReducer.latitude);
+  const longitude = useSelector((state: RootState) => state.HotPlaceReducer.longitude);
+  const userId = useSelector((state: RootState) => state.LoginReducer.userId);
 
   const handleClickPlaceCard = (data: PlaceCardProps) => {
     dispatch(PlaceDialogAction.setOpenPlaceDialog(true));
-    dispatch(PlaceDialogAction.setPlaceName(data.placeName));
-    dispatch(PlaceDialogAction.setAddress(data.address));
-    dispatch(PlaceDialogAction.setRating(data.rating));
-    dispatch(PlaceDialogAction.setDistance(data.distance));
-    dispatch(PlaceDialogAction.setVisitCount(data.visitCount));
+    dispatch(PlaceDialogAction.setPlaceId(data.id));
+    dispatch(PlaceDialogAction.setLoading(true));
+
+    getDetailDialogData(data.id, userId, latitude, longitude, (newData) => {
+      dispatch(PlaceDialogAction.setPlaceName(newData.placeName));
+      dispatch(PlaceDialogAction.setAddress(newData.placeAddress));
+      // 전화번호는 UI 생략해서 데이터 안 씀
+      dispatch(PlaceDialogAction.setVisitCount(newData.visitNum));
+      dispatch(PlaceDialogAction.setReviewContent(newData.reviewContent));
+      dispatch(PlaceDialogAction.setDistance(newData.distance));
+      dispatch(PlaceDialogAction.setSky(newData.weather.sky));
+      dispatch(PlaceDialogAction.setDegree(newData.weather.degree));
+      dispatch(PlaceDialogAction.setRainyProb(newData.weather.rainyProb));
+      dispatch(PlaceDialogAction.setRainyType(newData.weather.rainyType));
+      dispatch(PlaceDialogAction.setWindSpeed(newData.weather.windSpeed));
+      dispatch(PlaceDialogAction.setPictureId(newData.pictureId));
+      dispatch(PlaceDialogAction.setRating(newData.rating));
+      dispatch(PlaceDialogAction.setIsVisit(newData.visitSelected));
+      dispatch(PlaceDialogAction.setLoading(false));
+    });
   };
 
   return (
     <Grid container spacing={3}>
-      {data.map(data =>
-        <Grid item xs={4} key={data.placeName}>
-          <PlaceCard placeName={data.placeName} address={data.address} rating={data.rating}
-                     visitCount={data.visitCount} distance={data.distance} isHotPlaceCard={false}
+      {data.map((data, index) =>
+        <Grid item xs={4} key={index}>
+          <PlaceCard name={data.name} simpleAddress={data.simpleAddress} totalRating={data.totalRating}
+                     wantToVisit={data.wantToVisit} distanceString={data.distanceString} isHotPlaceCard={false}
+                     id={data.id} reviewId={data.reviewId}
                      onClick={() => handleClickPlaceCard(data)}/>
         </Grid>)}
     </Grid>

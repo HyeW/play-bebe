@@ -6,6 +6,7 @@ import NormalPlaceReducer from "./components/Place/NormalPlace/NormalPlaceReduce
 import PlaceDialogReducer from "./components/Place/PlaceDialogReducer";
 import SeeReviewReducer from "./components/Review/SeeReview/SeeReviewReducer";
 import WriteReviewReducer from "./components/Review/WriteReview/WriteReviewReducer";
+import HotPlaceReducer from "./components/Place/HotPlace/HotPlaceReducer";
 
 const rootReducer = combineReducers({
   MenuBarReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   PlaceDialogReducer,
   SeeReviewReducer,
   WriteReviewReducer,
+  HotPlaceReducer,
 })
 
 export default rootReducer;
