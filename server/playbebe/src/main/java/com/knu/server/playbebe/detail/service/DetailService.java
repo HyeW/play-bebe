@@ -55,6 +55,7 @@ public class DetailService {
         RegionNameDto regionNameDto = getRegionName(placeId); // 지역 이름
         CoordinateDto coordinateDto = getCurX_Y(regionNameDto); // 현재 위치에 따른 X,Y 좌료
         String JSONdata = getJSONdata(coordinateDto, dateTimeDto); // 날씨 JSON 정보
+        System.out.println("JSONdata" + JSONdata);
         WeatherDto weather = getWeather(JSONdata); // JSON 파싱해서 원하는 값 추출
         return weather;
     }
@@ -137,6 +138,7 @@ public class DetailService {
         LocalDate now = LocalDate.now();
         StringBuffer sb = new StringBuffer();
         sb.append(now.getYear());
+        if(now.getMonthValue()<10) sb.append(0);
         sb.append(now.getMonthValue());
         if (now.getDayOfMonth() < 10) sb.append(0);
         sb.append(now.getDayOfMonth());
@@ -204,6 +206,7 @@ public class DetailService {
     // JSON 데이터 파싱하기
     public static WeatherDto getWeather(String JSONdata) throws JSONException {
         JSONObject jObject = new JSONObject(JSONdata);
+        System.out.println(jObject);
         JSONObject response = jObject.getJSONObject("response");
         JSONObject body = response.getJSONObject("body");
         JSONObject items = body.getJSONObject("items");
