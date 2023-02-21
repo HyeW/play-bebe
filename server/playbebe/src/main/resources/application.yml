@@ -10,9 +10,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://dbinstance.csaqw2bfsjnj.ap-northeast-2.rds.amazonaws.com:3306/playbebe
+    url: jdbc:mysql://mydatabase.cc5cpcgh917t.ap-northeast-2.rds.amazonaws.com:3306/playbebe
     username: admin
-    password: 
+    password: qor5679177
 
   jpa:
     hibernate:
@@ -27,4 +27,4 @@ spring:
 
 file:
   #path: C:/KnuImages/
-  path: /home/ec2-user/secondTest(FilePath)/KnuImages/
+  path: /home/ec2-user/KnuImages/
