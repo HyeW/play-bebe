@@ -38,7 +38,7 @@ public class getPlace {
     public static void getConnection() throws SQLException {
         String url = "jdbc:mysql://dbinstance.csaqw2bfsjnj.ap-northeast-2.rds.amazonaws.com:3306/playbebe";
         String id = "admin";
-        String pass = "playbebe";
+        String pass = "";
         conn = DriverManager.getConnection(url,id,pass);
     }
 

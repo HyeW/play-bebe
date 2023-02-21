@@ -5,6 +5,8 @@ import {RootState} from "../../store";
 import {LoginAction} from "./LoginReducer";
 import {ChangeEvent} from "react";
 import {isEmailValidate} from "../../utils/user";
+import {getUserId, login} from "../../api/user";
+import axios from "axios";
 
 
 function EmailInputTextField(props: {
@@ -53,9 +55,16 @@ export default function LoginWithEmail() {
 
   const handleEmailLogin = () => {
     if (isEmailValidate(email, (isEmail) => dispatch(LoginAction.setEmailValidation(isEmail)))) {
-      navigate('/where-to-go');
+      login(email, password, (token) => {
+        window.localStorage.setItem('token', token);
+        dispatch(LoginAction.setToken(token));
+        navigate('/where-to-go');
+        getUserId(email, (userId)=>{
+          window.localStorage.setItem('userId', String(userId));
+          dispatch(LoginAction.setUserId(userId));
+        });
+      });
     }
-    // sendUserInfoForAuthenticate(email,password)
   };
 
   return (
@@ -79,3 +88,14 @@ export default function LoginWithEmail() {
     </Box>
   );
 }
+
+// 페이지 리로드 시 로그인 연장
+export const onSilentRefresh = (callback: (token: string, userId: number) => void) => {
+  const token = window.localStorage.getItem('token');
+  const userId = window.localStorage.getItem('userId');
+
+  if (token !== null && userId !== null) {
+    callback(token, Number(userId));
+    axios.defaults.headers.common['Authorization'] = token;
+  }
+};

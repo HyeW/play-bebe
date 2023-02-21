@@ -1,15 +1,24 @@
 import {Alert, Box, Button, Container} from "@mui/material";
 import CreateIcon from '@mui/icons-material/Create';
-import React from "react";
+import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import ReviewList from "./ReviewList";
+import {SeeReviewAction} from "./SeeReviewReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../../store";
+import {getReviewData} from "../../../api/review";
 
 export default function SeeReview() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const seeMoreCount = useSelector((state: RootState) => state.SeeReviewReducer.seeMoreCount);
+
+  useEffect(() => {
+    getReviewData(seeMoreCount, newData => dispatch(SeeReviewAction.setReviewData(newData)));
+  }, []);
 
   const handleClickGoToWriteReviewButton = () => {
     navigate('/write-review');
-
   };
 
   return (
@@ -22,8 +31,9 @@ export default function SeeReview() {
 }
 
 interface GoToWriteReviewButtonProps {
-  handleClickGoToWriteReviewButton: ()=>void,
+  handleClickGoToWriteReviewButton: () => void,
 }
+
 export const GoToWriteReviewButton = ({handleClickGoToWriteReviewButton}: GoToWriteReviewButtonProps) => {
   return (
     <Box sx={{display: 'flex', justifyContent: 'center'}} my={5}>

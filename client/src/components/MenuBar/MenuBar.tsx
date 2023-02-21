@@ -16,12 +16,13 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
 import {MenuBarAction} from "./MenuBarReducer";
-import { Link as RouterLink } from 'react-router-dom';
+import {Link as RouterLink} from 'react-router-dom';
+import {LoginAction} from "../Login/LoginReducer";
 
 const pages = ['어디 갈까', '회원 리뷰'];
 const pagesLinks = ['/where-to-go', '/users-review'];
 const settings = ['회원가입', '로그인'];
-const settingsLinks=['/signup', '/login'];
+const settingsLinks = ['/signup', '/login'];
 
 function MenuBar() {
   const dispatch = useDispatch();
@@ -38,6 +39,11 @@ function MenuBar() {
   const handleCloseNavMenu = () => {
     dispatch(MenuBarAction.setAnchorElementNav(null));
   };
+  const handleClickLogOut = () => {
+    window.localStorage.clear();
+    dispatch(LoginAction.setToken(undefined));
+    alert('로그아웃했습니다.');
+  };
 
   return (
     <AppBar position="sticky"
@@ -48,11 +54,12 @@ function MenuBar() {
           <LogoMD/>
           <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}/>
           <NavMenuMD handleCloseNavMenu={handleCloseNavMenu}/>
-          <UserMenuMD handleCloseUserMenu={handleCloseUserMenu}/>
+          <UserMenuMD handleCloseUserMenu={handleCloseUserMenu} handleClickLogOut={handleClickLogOut}/>
 
           <NavMenuXS handleOpenNavMenu={handleOpenNavMenu} handleCloseNavMenu={handleCloseNavMenu}/>
           <LogoXS/>
-          <UserMenuXS handleOpenUserMenu={handleOpenUserMenu} handleCloseUserMenu={handleCloseUserMenu}/>
+          <UserMenuXS handleOpenUserMenu={handleOpenUserMenu} handleCloseUserMenu={handleCloseUserMenu}
+                      handleClickLogOut={handleClickLogOut}/>
         </Toolbar>
       </Container>
     </AppBar>
@@ -181,26 +188,42 @@ const NavMenuXS = ({handleOpenNavMenu, handleCloseNavMenu}: NavMenuProps) => {
 interface UserMenuProps {
   handleOpenUserMenu?: (event: React.MouseEvent<HTMLElement>) => void;
   handleCloseUserMenu: () => void;
+  handleClickLogOut: () => void;
 }
 
-const UserMenuMD = ({handleCloseUserMenu}: UserMenuProps) => {
+const UserMenuMD = ({handleCloseUserMenu, handleClickLogOut}: UserMenuProps) => {
+  const token = useSelector((state: RootState) => state.LoginReducer.token);
+
   return (
     <Box sx={{flexGrow: 0, display: {xs: 'none', md: 'flex'}}}>
-      {settings.map((setting, index) => (
-        <Button key={setting} onClick={handleCloseUserMenu}
+      {token !== undefined?
+        <Button key={'로그아웃'} onClick={() => {
+          handleCloseUserMenu();
+          handleClickLogOut();
+        }}
                 color="secondary"
                 sx={{my: 2, color: 'inherit', display: 'block'}}
                 component={RouterLink}
-                to={settingsLinks[index]}>
-          {setting}
+                to={'/'}>
+          {'로그아웃'}
         </Button>
-      ))}
+        :
+        settings.map((setting, index) => (
+          <Button key={setting} onClick={handleCloseUserMenu}
+                  color="secondary"
+                  sx={{my: 2, color: 'inherit', display: 'block'}}
+                  component={RouterLink}
+                  to={settingsLinks[index]}>
+            {setting}
+          </Button>
+        ))}
     </Box>
   );
 };
 
-const UserMenuXS = ({handleOpenUserMenu, handleCloseUserMenu}: UserMenuProps) => {
+const UserMenuXS = ({handleOpenUserMenu, handleCloseUserMenu, handleClickLogOut}: UserMenuProps) => {
   const anchorElementUser = useSelector((state: RootState) => state.MenuBarReducer.anchorElementUser);
+  const token = useSelector((state: RootState) => state.LoginReducer.token);
 
   return (
     <Box sx={{flexGrow: 0, display: {xs: 'flex', md: 'none'}}}>
@@ -227,14 +250,25 @@ const UserMenuXS = ({handleOpenUserMenu, handleCloseUserMenu}: UserMenuProps) =>
         open={Boolean(anchorElementUser)}
         onClose={handleCloseUserMenu}
       >
-        {settings.map((setting, index) => (
-          <MenuItem key={setting}
-                    onClick={handleCloseUserMenu}
+        {token !== undefined ?
+          <MenuItem key={'로그아웃'}
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      handleClickLogOut();
+                    }}
                     component={RouterLink}
-                    to={settingsLinks[index]}>
-            <Typography textAlign="center">{setting}</Typography>
+                    to={'/'}>
+            <Typography textAlign="center">{'로그아웃'}</Typography>
           </MenuItem>
-        ))}
+          :
+          settings.map((setting, index) => (
+            <MenuItem key={setting}
+                      onClick={handleCloseUserMenu}
+                      component={RouterLink}
+                      to={settingsLinks[index]}>
+              <Typography textAlign="center">{setting}</Typography>
+            </MenuItem>
+          ))}
       </Menu>
     </Box>
   );

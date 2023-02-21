@@ -19,8 +19,8 @@ public class VisitController {
         return visitService.saveVisit(visitRequestDto);
     }
 
-    @DeleteMapping
-    public boolean notWantToVisit(@RequestBody VisitRequestDto visitRequestDto) {
-        return visitService.deleteVisit(visitRequestDto);
+    @DeleteMapping("/{userId}/{placeId}")
+    public boolean notWantToVisit(@PathVariable Long userId, @PathVariable Long placeId) {
+        return visitService.deleteVisit(userId, placeId);
     }
 }

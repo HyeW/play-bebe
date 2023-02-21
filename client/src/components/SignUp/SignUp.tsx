@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {SignUpAction} from "./SignUpReducer";
 import {RootState} from "../../store";
 import {isEmailValidate} from "../../utils/user";
+import {signUp} from "../../api/user";
 
 function SignUp() {
   const dispatch = useDispatch();
@@ -16,24 +17,8 @@ function SignUp() {
   const emailValidation = useSelector((state: RootState) => state.SignUpReducer.emailValidation);
 
   const handleSubmit = () => {
-    const url = '/api/signup';
-    const data = {
-      name: name,
-      email: email,
-      password: password
-    };
-
     if (isEmailValidate(email, (isEmail) => dispatch(SignUpAction.setEmailValidation(isEmail)))) {
-      // axios.post(url, data)
-      //   .then(response => {
-      //     console.log(response);
-      //     alert('Success in sign up! Please log in.');
-      //     navigate('/login');
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   });
-      navigate('/login');
+      signUp(email, password, name, () => navigate('/login'));
     }
   };
 
@@ -88,7 +73,7 @@ function NameInputTextField(props: {
 }) {
   return <TextField
     id="name"
-    label="이름"
+    label="닉네임"
     variant="outlined"
     autoComplete="off"
     type="text"
